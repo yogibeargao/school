@@ -3,21 +3,23 @@
       <top title="记录详情" :showBack="true"/>
       <r-body>
               <card>
-                  <date-time  title='开始时间' :model="this" value="name" ></date-time>
-                  <date-time  title='结束时间' :model="this" value="name"></date-time>
+                  <date-time :readonly="isShow"  title='开始时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="startDateStr" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
+                  <date-time  :readonly="isShow" title='结束时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="endDateStr" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
               </card>
               <card>
-                  <r-textarea placeholder="实习描述" :model="this" value="name" :height="200" :max="200"></r-textarea>
+                  <r-textarea :readonly="isShow" placeholder="实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
               </card>
                 <card>
-                  <r-textarea placeholder="实习评价" :model="this" value="name"  :autoSize="true" :rows="10" :max="200"></r-textarea>
+                  <r-textarea v-if="isShow" :readonly="isShow" placeholder="实习评价" :model="this.record" value="appraisalContent"  :autoSize="true" :rows="10" :max="200"></r-textarea>
               </card>
       </r-body>
-              <tab-bar>
+                            <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
+
+              <tab-bar v-if="!isShow">
                 <cell type="row" :vertical="true">
                               <cell >
                                   <box >
-                                      <r-button >提交</r-button>
+                                      <r-button :onClick="submit">提交</r-button>
                                   </box>
                               </cell>
                   </cell>
@@ -26,8 +28,10 @@
 </template>
 
 <script>
-import { Page, RBody,RImage,RTextarea, RButton, Selector,Cell, Box,TabBar, DateTime,Grid,Card,RTable,Selecter} from "rainbow-mobile-core";
+import { Page, RBody,RImage,RTextarea,Toast, RButton, Selector,Cell, Box,TabBar, DateTime,Grid,Card,RTable,Selecter} from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
+import Util from "../util/util";
+
 export default {
   components: {
     Top,
@@ -41,21 +45,52 @@ export default {
     RTextarea,
     TabBar,
     Cell,
-    RBody
+    RBody,
+    Toast
   },
   data() {
     return {
-      startDate:null,
-      endDate:null,
-      type:null,
-      name:null,
-      options:[{"key":"sj","value":"事假"},{"key":"bj","value":"病假"}]
+      record:{},
+      toastText:"操作失败",
+      type : "warn",
+      showFlag:false
     };
   },
   methods :{
-    onChange(){
-
+    async submit(){
+                  const url = "intern/detail/create";
+                  const identityId = Util.getIdentityId(this);
+                  this.record["studentNo"]= identityId;
+                  this.record.startDateStr = this.record.startDateStr+":00";
+                  this.record.endDateStr = this.record.endDateStr+":00";
+                  const temp_record = await this.$http.post(url,this.record);
+                  if(temp_record.body){
+                      this.toastText="操作成功";
+                      this.type = "success";
+                      this.showFlag=true;
+                  }else{
+                      this.showFlag=true;
+                  }
     }
+  },
+  computed:{
+      isShow(){
+        const id = this.$route.query.id;
+        return id?true:false;
+      }
+  },
+   async mounted(){
+          const id = this.$route.query.id;
+          if(id){
+                  const url = "intern/detail?internId="+id;
+                  const temp_record = await this.$http.get(url);
+                  console.log(temp_record.body)
+                  if(temp_record.body){
+                    temp_record.body.startDateStr = temp_record.body.startDateStr?temp_record.body.startDateStr.substring(0,16):"";
+                    temp_record.body.endDateStr = temp_record.body.endDateStr?temp_record.body.endDateStr.substring(0,16):"";
+                    this.record = temp_record.body;
+                  }
+          }
   }
 };
 </script>

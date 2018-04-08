@@ -35,6 +35,7 @@ import {
   Toast
 } from "rainbow-mobile-core";
 import Top from "../components/Top.vue";
+import Util from "../util/util";
 
 export default {
   components: {
@@ -71,6 +72,15 @@ export default {
   },
   methods: {
     async click() {
+      const share_id = this.$route.query.shareId;
+      if(share_id){
+        this.share();
+      }else{
+        this.sign();
+      }
+      
+    },
+    async share(){
       const param = {
         "id": this.$route.query.shareId,
         "sharedLongitude": this.longitude,
@@ -88,7 +98,28 @@ export default {
         this.type = "warn";
         this.showFlag=true;
       }
-    }
+    },
+    async sign(){
+      const identityId = Util.getIdentityId(this);
+      const param = {
+        "studentNos": identityId,
+        "longitude": this.longitude,
+        "latitude": this.latitude,
+        "signAddress": this.locationName
+      };
+      const status = await this.$http.post(`online/signin/create`,param);
+      if(status){
+        this.toastText="签到成功";
+        this.showFlag=true;
+        // this.$router.back()
+
+      }else{
+        this.toastText="签到失败";
+        this.type = "warn";
+        this.showFlag=true;
+      }
+    },
+
   },
   mounted() {
     const self = this;

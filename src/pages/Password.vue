@@ -3,16 +3,18 @@
       <top title="修改密码" :showBack="true"/>
       <r-body>
               <card>
-                 <r-input title="原密码" placeholder="请输入原密码" :model="this" value="name" :isPassword="true"/>
-                 <r-input title="新密码" placeholder="请输入新密码" :model="this" value="name" :isPassword="true"/>
-                 <r-input title="确认密码" placeholder="再输入新密码" :model="this" value="name" :isPassword="true"/>
+                 <r-input title="原密码" :required="true" placeholder="请输入原密码" :model="this" value="password" :isPassword="true"/>
+                 <r-input title="新密码" :required="true" placeholder="请输入新密码" :model="this" value="newPassword" :isPassword="true"/>
+                 <r-input title="确认密码" :required="true" placeholder="再输入新密码" :model="this" value="newPassword2" :isPassword="true"/>
               </card>
       </r-body>
+                              <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
+
               <tab-bar>
                   <cell type="row" :vertical="true">
                                 <cell >
                                   <box >
-                                      <r-button >提交</r-button>
+                                      <r-button :onClick="submit">提交</r-button>
                                   </box>
                                 </cell>
                     </cell>
@@ -34,10 +36,12 @@ import {
   Grid,
   Card,
   RTable,
-  Selecter,
+  Toast,
   RBody
 } from "rainbow-mobile-core";
 import Top from "../components/Top.vue";
+import Util from "../util/util";
+
 export default {
   components: {
     Top,
@@ -51,20 +55,50 @@ export default {
     RInput,
     TabBar,
     Cell,
-    RBody
+    RBody,
+    Toast
   },
   data() {
     return {
-      startDate: null,
-      endDate: null,
-      type: null,
-      value: null,
-      name:null,
-      options: [{ key: "sj", value: "事假" }, { key: "bj", value: "病假" }]
+      password: null,
+      newPassword: null,
+      newPassword2: null,
+      showFlag:false,
+      toastText:"",
+      type:"warn"
     };
   },
   methods: {
-    onChange() {}
+    async submit() {
+                if(this.newPassword==this.newPassword2){
+                        this.user = JSON.parse(sessionStorage.getItem("user"));
+                        const url = `user/login?userName=${this.user.loginName}&password=${this.password}`;
+                        const login = await this.$http.get(url);
+                        if(login.body.success){
+                                  const url = `user/changepwd?loginName=`+this.user.loginName+"&password="+this.password+"&newpassword="+this.newPassword;
+                                 const change = await this.$http.post(url);
+                                 if(change.body.success){
+                                      this.type ="success";
+                                      this.toastText= change.body.message;
+                                      this.showFlag = true;
+                                  }else{
+                                      this.toastText= "修改密码失败";
+                                      this.showFlag = true;
+                                  }
+
+                       }else{
+                          this.toastText= "原始密码不正确";
+                          this.showFlag = true;
+                      }
+                }else{
+                    this.toastText="新密码不一致";
+                    this.showFlag = true;
+                }
+
+
+
+              
+    }
   }
 };
 </script>

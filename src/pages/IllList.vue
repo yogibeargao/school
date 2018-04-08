@@ -115,7 +115,7 @@ export default {
             this.data.body = loadLeaves;
       }
   },
-   mounted(){
+  mounted(){
          this.loadLeave();
   }
 };

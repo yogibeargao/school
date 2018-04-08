@@ -117,7 +117,6 @@ export default {
               _article["id"] = this.isMessage?article.id:article.readId;
               _article["title"] = article.title;
               _article["desc"] = article.content;
-              debugger;
               _article["url"] = '/notes/detail?type='+this.isMessage+'&id='+_article.id+'&title='+article.title+'&content='+ article.content;
               _article["meta"] = {"source":"来源： "+ this.getSourceNameById(article.author),"date":"更新时间： "+article.updateTime};
               List.push(_article)

@@ -19,6 +19,8 @@
 import { Page,Card,RBody} from "rainbow-mobile-core";
 import {Previewer} from 'rainbow-mobile-previewer'
 import Top from "../components/Top.vue";
+import Util from "../util/util";
+
 export default {
   components: {
     Top,
@@ -60,6 +62,15 @@ export default {
   },
   methods: {
     onChange() {}
+  },
+  async mounted(){
+                const identityId = Util.getIdentityId(this);
+                const url = `intern/score/list?studentNos=`+identityId;
+                const list = await this.$http.post(url);
+                if(list.body){
+                  console.log(list.body)
+                }
+                
   }
 };
 </script>

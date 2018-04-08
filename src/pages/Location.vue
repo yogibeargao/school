@@ -21,6 +21,7 @@
 <script>
 import { Page, RBody,RImage, RButton,TabBar, Cell, Box, MenuBar,Grid,Card,RTable } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
+import Util from "../util/util";
 
 export default {
   components: {
@@ -40,16 +41,24 @@ export default {
         "head":[
           [{'text':'时间'},{'text':'地点'}]
         ],
-        "body":[
-          [{'text':'2017-09-09 09:09'},{'text':'地点1','link':'/location/detail?id=1'}],
-          [{'text':'2017-09-09 09:09'},{'text':'地点2','link':'/location/detail?id=2'}]
-        ]
+        "body":[]
       },
     };
   },
   computed :{
     
     
+  },
+  async mounted(){
+                const identityId = Util.getIdentityId(this);
+                const url = `online/signin/list`;
+                const signList = await this.$http.post(url,{"identityId":identityId,"pageNo":1,"pageSize":30});
+                if(signList.body){
+                    this.data.body = _.map(signList.body,(s)=>{
+                        return [{'text':s.signDate},{'text':s.signAddress}]
+                    })
+                }
+                
   }
 };
 </script>

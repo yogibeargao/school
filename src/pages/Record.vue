@@ -10,7 +10,7 @@
                   <cell type="row" :vertical="true">
                                 <cell >
                                     <box >
-                                        <r-button >增加记录</r-button>
+                                        <r-button :onClick="addRecord">增加记录</r-button>
                                     </box>
                                 </cell>
                     </cell>
@@ -21,6 +21,8 @@
 <script>
 import { Page,RBody, RImage, RButton,TabBar, Cell, Box, MenuBar,Grid,Card,RTable } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
+import Util from "../util/util";
+
 export default {
   components: {
     Top,
@@ -36,17 +38,32 @@ export default {
   data() {
     return {
        data:{
-      
-        "body":[
-          [{'text':'2017-09-09'},{'text':'2017-09-09'},{'text':'查看','link':'/record/detail?id=1'}],
-          [{'text':'2017-09-09'},{'text':'2017-09-09'},{'text':'查看','link':'/record/detail?id=2'}]
-        ]
+        "head":[
+          [{'text':'开始时间'},{'text':'结束时间'},{'text':'操作'}]
+        ],
+        "body":[]
       },
     };
   },
-  computed :{
+  methods :{
+      addRecord(){
+                  this.$router.push({"name":"RecordDetail"});
+      }
     
-    
+  },
+  async mounted(){
+                const identityId = Util.getIdentityId(this);
+                const url = `intern/detail/list`;
+                const list = await this.$http.post(url,{"studentNos":[identityId],"pageNo":1,"pageSize":30});
+                if(list.body){
+                    this.data.body = _.map(list.body,(s)=>{
+                        s.startDate = s.startDate?s.startDate.substring(0,16):"";
+                        s.endDate = s.endDate?s.endDate.substring(0,16):"";
+                        return [{'text':s.startDate},{'text':s.endDate},{'text':"查看",'link':'/record/detail?id='+s.id}]
+                    })
+                    // sessionStorage.setItem("record",JSON.stringify(list.body));
+                }
+                
   }
 };
 </script>

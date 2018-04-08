@@ -10,7 +10,7 @@
             <cell type="row" :vertical="true">
                         <cell>
                             <box>
-                                <r-button>增加</r-button>
+                                <r-button :onClick="addCompany">增加</r-button>
                             </box>
                         </cell>
             </cell>
@@ -21,6 +21,7 @@
 <script>
 import { Page, RImage,RBody, RButton,TabBar, Cell, Box, MenuBar,Grid,Card,RTable } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
+import Util from "../util/util";
 
 export default {
   components: {
@@ -38,18 +39,28 @@ export default {
     return {
        data:{
          "head":[
-          [{'text':'开始时间'},{'text':'结束时间'},{'text':'单位地址'}]
+          [{'text':'单位名称'},{'text':'单位地址'},{'text':'当前单位'}]
         ],
-        "body":[
-          [{'text':'2017-09-09'},{'text':'2017-09-09'},{'text':'地点1','link':'/company/detail?id=1'}],
-          [{'text':'2017-09-09'},{'text':'2017-09-09'},{'text':'地点2','link':'/company/detail?id=2'}]
-        ]
+        "body":[]
       },
     };
   },
-  computed :{
-    
-    
+  methods :{
+      addCompany(){
+          this.$router.push({"name":"CompanyDetail"});
+      }
+  },
+  async mounted(){
+                const identityId = Util.getIdentityId(this);
+                const url = `intern/company/stulist?studentNo=`+identityId;
+                const list = await this.$http.get(url);
+                console.log(list)
+                if(list.body){
+                    this.data.body = _.map(list.body,(s)=>{
+                        return [{'text':s.companyName,'link':'/company/detail?id='+s.internId},{'text':s.companyAddress},{'text':s.currentCompany==1?"是":"否"}]
+                    })
+                }
+                
   }
 };
 </script>
