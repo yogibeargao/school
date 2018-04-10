@@ -8,19 +8,9 @@
             <card title="记录表现">
                   <div id="record" style="width: 100%;height:270px;"></div>
             </card>
-            <card>
-                  <r-textarea placeholder="实习评价" :model="this" value="name" :height="250" :max="300"></r-textarea>
-            </card>
+          
       </r-body>
-             <tab-bar>
-            <cell type="row" :vertical="true">
-                        <cell >
-                            <box >
-                                <r-button>提交</r-button>
-                            </box>
-                        </cell>
-            </cell>
-       </tab-bar>
+           
           
   </page>
 </template>

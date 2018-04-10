@@ -65,8 +65,8 @@ export default {
   },
   async mounted(){
                 const identityId = Util.getIdentityId(this);
-                const url = `intern/score/list?studentNos=`+identityId;
-                const list = await this.$http.post(url);
+                const url = `intern/score/list`;
+                const list = await this.$http.post(url,{"studentNos":[identityId],"pageNo":1,"pageSize":30});
                 if(list.body){
                   console.log(list.body)
                 }

@@ -102,7 +102,7 @@ export default {
                   if(!_.isEmpty(sharing.body)){
                         this.fkSharedRecordCreater = sharing.body.fkSharedRecordCreater;
                         this.shareId = sharing.body.id;
-                        this.shareShow=true;
+                        // this.shareShow=true;
                   }
                   const location_url = `location/sharing/count?studentNo=${identityId}`;
                   const location = await this.$http.get(location_url);

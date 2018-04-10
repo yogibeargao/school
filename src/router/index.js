@@ -23,6 +23,7 @@ const Notes = r => require.ensure([], () => r(require('@/pages/Notes')), 'Notes'
 const NotesDetail = r => require.ensure([], () => r(require('@/pages/NotesDetail')), 'NotesDetail');
 const Score = r => require.ensure([], () => r(require('@/pages/Score')), 'Score');
 const ScoreList = r => require.ensure([], () => r(require('@/pages/ScoreList')), 'ScoreList');
+const ScoreDetail = r => require.ensure([], () => r(require('@/pages/ScoreDetail')), 'ScoreDetail');
 const Personal = r => require.ensure([], () => r(require('@/pages/Personal')), 'Personal');
 const Publish = r => require.ensure([], () => r(require('@/pages/Publish')), 'Publish');
 const Share = r => require.ensure([], () => r(require('@/pages/Share')), 'Share');
@@ -69,6 +70,11 @@ const router = new Router({
       path: '/score/list',
       name: 'ScoreList',
       component: ScoreList,
+    },
+    {
+      path: '/score/detail',
+      name: 'ScoreDetail',
+      component: ScoreDetail,
     },
     {
       path: '/ill/list',
