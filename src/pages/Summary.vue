@@ -3,17 +3,52 @@
       <top title="实习总结" :showBack="true"/>
       <r-body>
 
-
-                  <r-textarea placeholder="请输入实习总结描述" :model="this" value="name" :height="600" :max="600"></r-textarea>
+ 
+                  <r-textarea placeholder="请输入实习总结描述" :model="this" value="name" :height="580" :max="600"></r-textarea>
       </r-body>
              <tab-bar>
-                  <cell type="row" :vertical="true">
-                                <cell >
-                                  <box >
-                                      <r-button >提交</r-button>
-                                  </box>
-                                </cell>
-                    </cell>
+                  <div class="example-simple">
+    <div class="upload">
+      <ul>
+        <li v-for="file in files" :key="file.id">
+          <span>{{file.name}}</span> -
+          <span>{{file.size | formatSize}}</span> -
+          <span v-if="file.error">{{file.error}}</span>
+          <span v-else-if="file.success">成功</span>
+          <span v-else-if="file.active">active</span>
+          <span v-else-if="file.active">active</span>
+          <span v-else></span>
+        </li>
+      </ul>
+      <div class="example-btn">
+        <file-upload
+          class="btn btn-primary"
+          post-action="http://118.190.96.118:8080/exercitation-app/intern/summary/create"
+          extensions="gif,jpg,jpeg,png,webp"
+          accept="image/png,image/gif,image/jpeg,image/webp"
+          :multiple="false"
+          :size="1024 * 1024 * 10"
+          v-model="files"
+          name="file" 
+          :custom-action="customAction"
+          @input-filter="inputFilter"
+          @input-file="inputFile"
+          ref="upload">
+          <i class="fa fa-plus white"></i>
+          实习报告
+        </file-upload>
+        <button type="button" class="btn btn-success" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
+          <i class="fa fa-arrow-up white" aria-hidden="true"></i>
+          上传报告
+        </button>
+        <button type="button" class="btn btn-danger"  v-else @click.prevent="$refs.upload.active = false">
+          <i class="fa fa-stop white" aria-hidden="true"></i>
+          停止上传
+        </button>
+      </div>
+    </div>
+    
+  </div>
               </tab-bar>
   </page>
 </template>
@@ -39,6 +74,9 @@ import {
 
 
 import Top from "../components/Top.vue";
+import FileUpload from 'vue-upload-component'
+
+
 export default {
   components: {
     Top,
@@ -52,25 +90,110 @@ export default {
     RTextarea,
     TabBar,
     Cell,
-    RBody
+    RBody,
+    FileUpload
   },
   data() {
-     return {
-      url: 'http://your-post.url',
-      headers: {'access-token': '<your-token>'},
-      filesUploaded: []
+    return {
+      files: [],
     };
   },
   methods: {
-     thumbUrl (file) {
-      return file.myThumbUrlProperty
+   inputFilter(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        // Before adding a file
+        // 添加文件前
+        // Filter system files or hide files
+        // 过滤系统文件 和隐藏文件
+        if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
+          return prevent()
+        }
+        // Filter php html js file
+        // 过滤 php html js 文件
+        if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
+          return prevent()
+        }
+      }
     },
-    onFileChange (file) {
-      // Handle files like:
-      this.fileUploaded = file
+    inputFile(newFile, oldFile) {
+      if (newFile && !oldFile) {
+        // add
+        console.log('add', newFile)
+      }
+      if (newFile && oldFile) {
+        // update
+        console.log('update', newFile)
+      }
+      if (!newFile && oldFile) {
+        // remove
+        console.log('remove', oldFile)
+      }
     }
-  }
+  },
+  mounted(){
+    //设置formData数据
+  },
+  
+
 };
 </script>
 
 
+<style>
+.upload li{
+  color: black;
+}
+.white{
+  color: white;
+}
+.example-simple{
+    text-align: center;
+    width: 100%;
+}
+.example-simple label.btn {
+  margin-bottom: 0;
+  margin-right: 1rem;
+}
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    border-radius: .25rem;
+    transition: all .15s ease-in-out;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.file-uploads {
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    display: inline-block;
+}
+.btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+[type=reset], [type=submit], button, html [type=button] {
+    -webkit-appearance: button;
+}
+button, select {
+    text-transform: none;
+}
+button, input {
+    overflow: visible;
+}
+</style>

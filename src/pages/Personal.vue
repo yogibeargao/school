@@ -12,13 +12,12 @@
             <row title="实习地址" :model="this.user" value='workAddress' v-if="isStudent"/>
             <row title="工作地址" :model="this.user" value='address' v-if="!isStudent"/>
             <row title="电话" :model="this.user" value='phoneNo' :isLink="isStudent" :onClick="changPhone"/>
-            <confirm :model="this" value="show" :showInput="true" inputType="number" title="修改电话" :onConfirm="modifyPhone"/>
       </r-body>     
   </page>
 </template>
 
 <script>
-import { Page, RBody,RImage, RButton,TabBar,Confirm,RForm, Row, Box, MenuBar,Grid,Card,RTable } from "rainbow-mobile-core";
+import { Page, RBody,RImage, RButton,TabBar,Confirm,RForm, Row, Box, MenuBar,Grid,Card,RTable,ConfirmApi } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
 import user from "../assets/user.gif";
 import Util from "../util/util";
@@ -35,7 +34,7 @@ export default {
     Row,
     RImage,
     RBody,
-    Confirm
+    ConfirmApi
   },
   data() {
     return {
@@ -50,8 +49,33 @@ export default {
     };
   },
   methods :{
-    changPhone(){
-        this.show=true;
+    async changPhone(){
+                  const user = JSON.parse(sessionStorage.getItem("user"));
+                  const param = {"studentNos":[user.identityId],"pageNo":1,"pageSize":30};
+                  const phones = await this.$http.post(`user/changephone/list`,param);
+                  if(_.size(phones.body)>0){
+                       ConfirmApi.show(this,{
+                        title: '',
+                        content: '不能重复申请',
+                       });
+                  }else{
+                        const url = "user/changephone";
+                        const changephone = await this.$http.post(url);
+                        if(changephone.body){
+                            ConfirmApi.show(this,{
+                            title: '',
+                            content: '申请成功',
+                          });
+                        }else{
+                          ConfirmApi.show(this,{
+                            title: '',
+                            content: '申请失败',
+                          });
+                        }
+                  }
+
+
+               
     }, 
     modifyPhone(value){
        

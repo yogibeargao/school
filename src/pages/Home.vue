@@ -97,13 +97,13 @@ export default {
             const identityId = Util.getIdentityId(this);
             const isStudent = Util.isStudent(this);
             if(isStudent){
-                  const sharing_url = `location/sharing/unresponsed?studentNo=${identityId}`;
-                  const sharing = await this.$http.get(sharing_url);
-                  if(!_.isEmpty(sharing.body)){
-                        this.fkSharedRecordCreater = sharing.body.fkSharedRecordCreater;
-                        this.shareId = sharing.body.id;
-                        // this.shareShow=true;
-                  }
+                  // const sharing_url = `location/sharing/unresponsed?studentNo=${identityId}`;
+                  // const sharing = await this.$http.get(sharing_url);
+                  // if(!_.isEmpty(sharing.body)){
+                  //       this.fkSharedRecordCreater = sharing.body.fkSharedRecordCreater;
+                  //       this.shareId = sharing.body.id;
+                  //       // this.shareShow=true;
+                  // }
                   const location_url = `location/sharing/count?studentNo=${identityId}`;
                   const location = await this.$http.get(location_url);
                   const message_url = `message/count?identityId=${identityId}`;
