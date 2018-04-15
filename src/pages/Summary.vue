@@ -23,7 +23,6 @@
       <div class="example-btn">
         <file-upload
           class="btn btn-primary"
-          post-action="http://118.190.96.118:8080/exercitation-app/intern/summary/create"
           extensions="gif,jpg,jpeg,png,webp"
           accept="image/png,image/gif,image/jpeg,image/webp"
           :multiple="false"
@@ -99,6 +98,23 @@ export default {
     };
   },
   methods: {
+      customAction(file, component){
+       const self = this;
+       const reader = new FileReader();
+       reader.readAsBinaryString(file.file);
+
+    reader.onload = async function()
+    {
+      const formData = new FormData();
+      formData.append('file', this.result);
+             return await self.$http.post(`intern/summary/upload?filename=name`,formData);
+
+    };
+
+       
+     
+
+    },
    inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         // Before adding a file
