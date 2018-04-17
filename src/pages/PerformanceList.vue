@@ -1,13 +1,11 @@
 <template>
   <page>
-      <top title="实习总结列表" :showBack="true"/>
+      <top title="实习评价列表" :showBack="true"/>
       <r-body>
+              <search :condition="condition" :callBack="search"/>
               <card>
-                  <picker  title="班级" :options="options1" :model="this" value="name"></picker>
-                  <picker  title="学生" :options="options2" :model="this" value="name"></picker>
+                  <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
               </card>
-           
-              
               <card>
                    <r-table :data="data" />
               </card>
@@ -30,9 +28,12 @@ import {
   Grid,
   Card,
   RTable,
-  RBody
+  RBody,
+  Selector
 } from "rainbow-mobile-core";
 import Top from "../components/Top.vue";
+import Util from "../util/util";
+import Search from '../components/Search.vue';
 export default {
   components: {
     Top,
@@ -46,30 +47,45 @@ export default {
     RTextarea,
     TabBar,
     Cell,
-    RBody
+    RBody,
+    Search,
+    Selector
   },
   data() {
     return {
-      startDate: null,
-      endDate: null,
-      type: null,
-      name: [],
-      options1:[['一班','二班']],
-      options2:[['张三','李四']],
+      status:0,
+      condition: {},
+      options: [{ key: 0, value: "未评价" }, { key: 1, value: "已评价" }],
       data:{
         "head":[
           [{'text':'姓名'},{'text':'班级'},{'text':'状态'}]
         ],
-        "body":[
-          [{'text':'张三'},{'text':'计算机'},{'text':'未评价','link':'/performance?id=1'}],
-          [{'text':'张三'},{'text':'计算机'},{'text':'已评价','link':'/performance?id=1'}],
-        ]
+        "body":[]
       },
 
     };
   },
-  methods: {
-    onChange() {}
+   methods: {
+    async search(condition) {
+
+                  const identityId = Util.getIdentityId(this);
+                  const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
+                  const status = await this.$http.post(`intern/attendenceAppraisal/list`,param);
+                  const status_data = [];
+                  console.log(status.body)
+                  _.each(status.body,(student,index)=>{
+                      status_data.push([{'text':student.studentName},{'text':student.signAddress?student.signAddress:'未评价'}])
+                  })
+                  this.data.body = status_data;
+                  sessionStorage.setItem("appraisal_data",JSON.stringify(status_data));
+
+    }
+  },
+   mounted(){
+    const recordList = sessionStorage.getItem("appraisal_data");
+    if(recordList){
+        this.data.body = JSON.parse(recordList);
+    }
   }
 };
 </script>

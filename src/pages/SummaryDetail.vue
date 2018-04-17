@@ -1,19 +1,25 @@
 <template>
   <page>
-      <top title="实习评价" :showBack="true"/>
+      <top title="实习总结评价" :showBack="true"/>
       <r-body>
-             <r-textarea placeholder="请输入实习总结评价或者打回理由" :model="this" value="name" :height="600" :max="600"></r-textarea>
+             <r-input title="分数" :required="true" :max="100" :min="0"  :model="this" value="score" :isNumber="true"/>
+             <r-textarea placeholder="请输入实习总结评价或者打回理由" :model="this" value="comments" :height="600" :max="600"></r-textarea>
       </r-body>
              <tab-bar>
                   <cell type="row" :vertical="true">
-                                <cell >
+                                <cell>
                                   <box >
-                                      <r-button >提交</r-button>
+                                      <r-button :onClick="submit">提交</r-button>
                                   </box>
                                 </cell>
                                  <cell >
                                   <box >
-                                      <r-button type='danger'>打回</r-button>
+                                      <r-button type='danger' :onClick="reject">打回</r-button>
+                                  </box>
+                                </cell>
+                                 <cell >
+                                  <box >
+                                      <r-button >下载实习报告</r-button>
                                   </box>
                                 </cell>
                     </cell>
@@ -36,7 +42,9 @@ import {
   Card,
   RTable,
   Selecter,
-  RBody
+  RBody,
+  ConfirmApi,
+  RInput
 } from "rainbow-mobile-core";
 import Top from "../components/Top.vue";
 export default {
@@ -52,19 +60,60 @@ export default {
     RTextarea,
     TabBar,
     Cell,
-    RBody
+    RBody,
+    ConfirmApi,
+    RInput
   },
   data() {
     return {
-      startDate: null,
-      endDate: null,
-      type: null,
-      value: null,
-      options: [{ key: "sj", value: "事假" }, { key: "bj", value: "病假" }]
+      comments: null,
+      score:null
     };
   },
   methods: {
-    onChange() {}
+    async submit() {
+                  const id = this.$route.query.id;
+                  const param = {"id":id,"score":this.score,"comments":this.comments,"state":1} 
+                  const list = await this.$http.post(`intern/summary/appraisal`,param);
+                  if(list.body){
+                         ConfirmApi.show(this,{
+                            title: '',
+                            content: '操作成功',
+                          });
+                  }else{
+                           ConfirmApi.show(this,{
+                            title: '',
+                            content: '操作失败',
+                          });
+                  }
+    },
+    async reject() {
+                  const id = this.$route.query.id;
+                  const param = {"id":id,"score":this.score,"comments":this.comments,"state":0} 
+                  const list = await this.$http.post(`intern/summary/appraisal`,param);
+                  if(list.body){
+                           ConfirmApi.show(this,{
+                            title: '',
+                            content: '操作成功',
+                          });
+                  }else{
+                           ConfirmApi.show(this,{
+                            title: '',
+                            content: '操作失败',
+                          });
+                  }
+    }
+  },
+  async mounted(){
+          const id = this.$route.query.id;
+          if(id){
+                  const url = "intern/summary/detail?summaryId="+id;
+                  const temp_record = await this.$http.get(url);
+                  if(temp_record.body){
+                    this.comments = temp_record.body.comments;
+                  }
+          }
+  
   }
 };
 </script>

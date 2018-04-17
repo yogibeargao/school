@@ -1,25 +1,21 @@
 <template>
   <page>
-      <top title="学生考勤" :showBack="true"/>
+      <top title="签到查看" :showBack="true"/>
       <r-body>
-              <card>
-                  <picker  title="班级" :options="options1" :model="this" value="name"   ></picker>
-                  <picker  title="学生" :options="options2" :model="this" value="name"  ></picker>
-              </card>
-              <card>
-                  <date-time  title='开始时间' :model="this"  value="startDate" ></date-time>
-                  <date-time  title='结束时间' :model="this"  value="startDate" ></date-time>
-              </card>
-                <card>
-                      <r-table :data="data" />
-                </card>
-      </r-body>       
+                    <search :condition="condition" :callBack="search"/>
+                    <card>
+                                <r-table :data="data" />
+                    </card>  
+      </r-body>  
   </page>
 </template>
 
 <script>
-import { Page,RBody, RImage, RButton,TabBar,Picker, Cell, Box, DateTime,Grid,Card,RTable } from "rainbow-mobile-core";
+import { Page,RDialog,Toast,Row,Checker, RImage,RBody,Confirm, RButton,TabBar,Picker, Cell, Box, DateTime,Grid,Card,RTable,Selector } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
+import Util from "../util/util";
+import  Search from '../components/Search.vue';
+
 export default {
   components: {
     Top,
@@ -28,32 +24,50 @@ export default {
     Box,
     RButton,
     RTable,
-    DateTime,
+    TabBar,
     Cell,
     Picker,
-    TabBar,
-    RBody
+    DateTime,
+    RBody,
+    Selector,
+    Confirm,
+    RDialog,
+    Row,
+    Checker,
+    Toast,
+    Search
   },
   data() {
     return {
-      name:[],
-       data:{
+       condition:{},
+        data:{
         "head":[
-          [{'text':'姓名'},{'text':'地点'},{'text':'状态'}]
+          [{'text':'姓名'},{'text':'位置'}]
         ],
-        "body":[
-          [{'text':'2017-09-09'},{'text':'上海市杨浦区政立路','link':'/location/detail?id=1'},{'text':'已签到'}],
-          [{'text':'2017-09-09'},{'text':'上海市杨浦区政立路','link':'/location/detail?id=2'},{'text':'未签到'}]
-        ]
-      },
-      options1:[['一班','二班']],
-      options2:[['张三','李四']],
-      startDate:null
+        "body":[]
+      }
     };
   },
   computed :{
+      disableButton(){
+        return _.isEmpty(this.student);
+      }
     
-    
+  },
+  methods:{
+   async search(condition){
+                  const identityId = Util.getIdentityId(this);
+                  const param = {"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
+                  const status = await this.$http.post(`online/signin/list`,param);
+                  const status_data = [];
+                  _.each(status.body,(student,index)=>{
+                      status_data.push([{'text':student.studentName},{'text':student.signAddress?student.signAddress:'未签到'}])
+                  })
+                  this.data.body = status_data;
+                  // sessionStorage.setItem("class",this.class);
+                  // sessionStorage.setItem("student_Nos",JSON.stringify(student_Nos));
+                  // sessionStorage.setItem("status_data",JSON.stringify(status_data));
+          }
   }
 };
 </script>

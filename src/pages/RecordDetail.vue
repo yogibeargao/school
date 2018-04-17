@@ -10,7 +10,7 @@
                   <r-textarea :readonly="isShow" placeholder="实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
               </card>
                 <card>
-                  <r-textarea v-if="isShow" :readonly="isShow" placeholder="实习评价" :model="this.record" value="appraisalContent"  :autoSize="true" :rows="10" :max="200"></r-textarea>
+                  <r-textarea v-if="isShow" :readonly="isShow" placeholder="实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
               </card>
       </r-body>
                             <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
@@ -84,7 +84,6 @@ export default {
           if(id){
                   const url = "intern/detail?internId="+id;
                   const temp_record = await this.$http.get(url);
-                  console.log(temp_record.body)
                   if(temp_record.body){
                     temp_record.body.startDateStr = temp_record.body.startDateStr?temp_record.body.startDateStr.substring(0,16):"";
                     temp_record.body.endDateStr = temp_record.body.endDateStr?temp_record.body.endDateStr.substring(0,16):"";

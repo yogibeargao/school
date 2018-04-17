@@ -2,33 +2,16 @@
   <page>
       <top title="位置共享" :showBack="true"/>
       <r-body>
-             <card>
-                  <selector title="班级" :options="classes" :model="this.share" value="classes" :onChange="classChange" ></selector>
-                  <row title="学生" :model="this" value="v_student"  :onClick="showStudent" :isLink="true" ></row>
-              </card>
-              <card>
-                  <date-time  title='开始时间' :model="this" value="startDate"></date-time>
-                  <date-time  title='结束时间' :model="this" value="startDate" ></date-time>
-              </card>
+                    <search :condition="condition" :callBack="search"/>
+                  <card>
+                      <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
+                  </card>
                     <card>
                                 <r-table :data="data" />
                     </card>  
       </r-body>  
-                    <confirm :model="this" value="show" title="您确认发起共享么?"  :onConfirm="onConfirm">共享学生是：{{ v_student }}</confirm>
-       <r-dialog :model="this" value="showDialog" :disableMask="false">
-                        <checker :model="this.share" value="student" :data='students' type="list" :onChange="onChange"/>
-       </r-dialog>
-        <tab-bar>
-                      <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
-
-            <cell type="row" :vertical="true">
-                          <cell >
-                            <box >
-                                <r-button :onClick="shareCreate" :disabled="disableButton">发起响应</r-button>
-                            </box>
-                          </cell>
-              </cell>
-       </tab-bar>
+   
+        
   </page>
 </template>
 
@@ -36,6 +19,7 @@
 import { Page,RDialog,Toast,Row,Checker, RImage,RBody,Confirm, RButton,TabBar,Picker, Cell, Box, DateTime,Grid,Card,RTable,Selector } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
 import Util from "../util/util";
+import  Search from '../components/Search.vue';
 
 export default {
   components: {
@@ -55,85 +39,39 @@ export default {
     RDialog,
     Row,
     Checker,
-    Toast
+    Toast,
+    Search
   },
   data() {
     return {
        data:{
         "head":[
-          [{'text':'时间'},{'text':'地点'}]
+          [{'text':'姓名'},{'text':'地点'}]
         ],
-        "body":[
-          [{'text':'2017-09-09 09:09'},{'text':'地点1','link':'/location/detail?id=1'}],
-          [{'text':'2017-09-09 09:09'},{'text':'地点2','link':'/location/detail?id=2'}]
-        ]
+        "body":[]
       },
-      classes:[],
-      options2:[['张三','李四']],
-      startDate:null,
-      name:[],
-      students:[],
-      v_student:[],
-      share:{},
-      show:false,
+      condition:{},
+      options: [{ key: 0, value: "未响应" }, { key: 1, value: "已响应" }],
       showFlag:false,
       toastText:"",
-      type:"success",
+      status:0,
       showDialog:false
     };
   },
   computed :{
-      disableButton(){
-        return _.isEmpty(this.share.student);
-      }
     
   },
   methods:{
-    shareCreate(){
-        this.show=true;
-    },
-    async onConfirm(){
-       const status = await this.$http.post(`location/sharing/create`,{"studentNos":this.share.student});
-      if(status){
-        this.toastText="发起成功";
-        this.showFlag=true;
-      }else{
-        this.toastText="发起失败";
-        this.type = "warn";
-        this.showFlag=true;
-      }
-    },
-    showStudent(){
-        this.showDialog=true;
-    },
-    onChange(){
-                  const _class = [];
-                  _.each(this.students,(cla)=>{
-                      _.each(this.share.student,(pcla)=>{
-                            if(pcla==cla.key){
-                                  _class.push(cla.value);
-                            }
-                      });
-                  });
-                  this.v_student = _.isEmpty(_class)?"":_class.join(",");
-    },
-    async classChange(){
+    async search(condition){
                   const identityId = Util.getIdentityId(this);
-                  const students = await this.$http.get(`user/class/students?identityId=${identityId}&&classNo=${this.share.classes}`);
-                  const _students = [];
-                  _.each(students.body,(stu)=>{
-                      _students.push({"key":stu.studentNo,"value":stu.studentName})
-                  });
-                  this.students=_students;
+                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
+                  const list = await this.$http.post(`location/sharing/list`,param);
+                  this.data.body = _.map(list.body,(s)=>{
+                        return [{'text':s.studentName},{'text':s.sharedAddress?s.sharedAddress:"未响应"}]
+                  })
     }
   },
-  async mounted(){
-                  const identityId = Util.getIdentityId(this);
-                  const classes = await this.$http.get(`user/teacherclass?identityId=${identityId}`);
-                  this.classes = _.map(classes.body,(cla)=>{
-                      return {"key":cla.classNo,"value":cla.className}
-                  })
-  }
+  
 };
 </script>
 

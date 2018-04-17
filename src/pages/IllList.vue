@@ -2,14 +2,9 @@
   <page>
       <top title="请假列表" :showBack="true"/>
 <r-body>
-              <card v-if="!isStudent">
-                  <picker  title="班级" :options="options1"  :model="this"  value="class" ></picker>
-                  <picker  title="学生" :options="options2"  :model="this"  value="name" ></picker>
-              </card>
-              <card>
-                  <date-time  title='开始时间' :model="this" value="startDateStr" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']" :onChange="flash"></date-time>
-                  <date-time  title='结束时间' :model="this" value="endDateStr" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']" :onChange="flash"></date-time>
-              </card>
+              
+               <search :condition="condition" :callBack="flash" :showClass="false"/>
+
                <card>
                   <selector  title="状态" :options="options" :model="this" value="type" :onChange="flash"></selector>
               </card>
@@ -33,6 +28,7 @@
 import { Page,RBody, RImage, RButton,TabBar,Picker, Cell,Selector, Box, DateTime,Grid,Card,RTable } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
 import Util from "../util/util";
+import  Search from '../components/Search.vue';
 
 export default {
   components: {
@@ -47,7 +43,8 @@ export default {
     Picker,
     TabBar,
     Selector,
-    RBody
+    RBody,
+    Search
   },
   data() {
     return {
@@ -57,10 +54,7 @@ export default {
         ],
         "body":[]
       },
-      options1:[['一班','二班']],
-      options2:[['张三','李四']],
-      startDateStr:null,
-      endDateStr:null,
+      condition:{},
       type:null,
       options: [{ key: 0, value: "未审批" }, { key: 1, value: "已审批" }],
       class:[],
@@ -96,11 +90,11 @@ export default {
             }else{
               param["status"] = "0"
             }
-            if(this.startDateStr!=null){
-              param["startDateStr"] = this.startDateStr+":00";
+            if(this.condition.startDateStr!=null){
+              param["startDateStr"] = this.condition.startDateStr+":00";
             }
-            if(this.endDateStr!=null){
-              param["endDateStr"] = this.endDateStr+":00";
+            if(this.condition.endDateStr!=null){
+              param["endDateStr"] = this.condition.endDateStr+":00";
             }
             const leaves = await this.$http.post(url,param);
             const loadLeaves = [];
@@ -110,13 +104,17 @@ export default {
               loadLeaves.push([{'text':leave.studentName},{'text':leave.leaveStartDate},{'text':leave.state==1?'已审批':'未审批','link':'/ill/detail?leaveId='+leave.leaveId}])
             })
             if(!_.isEmpty(leaves.body)){
-              sessionStorage.setItem("leaves",JSON.stringify(leaves.body));
+              sessionStorage.setItem("leaves",JSON.stringify(loadLeaves));
             }
             this.data.body = loadLeaves;
       }
   },
   mounted(){
-         this.loadLeave();
+       const leaves =  sessionStorage.getItem("leaves");
+       if(leaves){
+        this.data.body = JSON.parse(leaves);
+       }
+
   }
 };
 </script>
