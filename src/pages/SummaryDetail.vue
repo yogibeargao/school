@@ -2,24 +2,24 @@
   <page>
       <top title="实习总结评价" :showBack="true"/>
       <r-body>
-             <r-input title="分数" :required="true" :max="100" :min="0"  :model="this" value="score" :isNumber="true"/>
-             <r-textarea placeholder="请输入实习总结评价或者打回理由" :model="this" value="comments" :height="600" :max="600"></r-textarea>
+             <r-input title="分数"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
+             <r-textarea placeholder="请输入打回理由" :model="this" value="comments" :height="600" :max="600"></r-textarea>
       </r-body>
              <tab-bar>
                   <cell type="row" :vertical="true">
-                                <cell>
+                                <cell v-if="!score">
                                   <box >
-                                      <r-button :onClick="submit">提交</r-button>
+                                      <r-button :onClick="submit">通过</r-button>
                                   </box>
                                 </cell>
-                                 <cell >
+                                 <cell v-if="!score">
                                   <box >
                                       <r-button type='danger' :onClick="reject">打回</r-button>
                                   </box>
                                 </cell>
                                  <cell >
                                   <box >
-                                      <r-button >下载实习报告</r-button>
+                                      <r-button :onClick="download">下载实习报告</r-button>
                                   </box>
                                 </cell>
                     </cell>
@@ -47,6 +47,8 @@ import {
   RInput
 } from "rainbow-mobile-core";
 import Top from "../components/Top.vue";
+import Vue from 'vue';
+
 export default {
   components: {
     Top,
@@ -67,41 +69,63 @@ export default {
   data() {
     return {
       comments: null,
-      score:null
+      score:null,
+      v_score:null,
+      state:null
     };
   },
   methods: {
+    async download(){
+        const id = this.$route.query.id;
+        window.open(Vue.http.options.root+"/intern/summary/download?internSummaryId="+id);
+    },
     async submit() {
                   const id = this.$route.query.id;
-                  const param = {"id":id,"score":this.score,"comments":this.comments,"state":1} 
-                  const list = await this.$http.post(`intern/summary/appraisal`,param);
-                  if(list.body){
-                         ConfirmApi.show(this,{
+                  if(!this.v_score){
+                      ConfirmApi.show(this,{
                             title: '',
-                            content: '操作成功',
+                            content: '请输入成绩',
                           });
                   }else{
-                           ConfirmApi.show(this,{
-                            title: '',
-                            content: '操作失败',
-                          });
+                      const param = {"id":id,"score":this.v_score,"comments":this.comments,"state":1} 
+                      const list = await this.$http.post(`intern/summary/appraisal`,param);
+                      if(list.body){
+                            ConfirmApi.show(this,{
+                                title: '',
+                                content: '操作成功',
+                              });
+                      }else{
+                              ConfirmApi.show(this,{
+                                title: '',
+                                content: '操作失败',
+                              });
+                      }
                   }
+                  
     },
     async reject() {
                   const id = this.$route.query.id;
-                  const param = {"id":id,"score":this.score,"comments":this.comments,"state":0} 
-                  const list = await this.$http.post(`intern/summary/appraisal`,param);
-                  if(list.body){
-                           ConfirmApi.show(this,{
+                  if(!this.comments){
+                      ConfirmApi.show(this,{
                             title: '',
-                            content: '操作成功',
+                            content: '请输入打回理由',
                           });
                   }else{
-                           ConfirmApi.show(this,{
-                            title: '',
-                            content: '操作失败',
-                          });
+                        const param = {"id":id,"score":this.v_score,"comments":this.comments,"state":0} 
+                        const list = await this.$http.post(`intern/summary/appraisal`,param);
+                        if(list.body){
+                                ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作成功',
+                                });
+                        }else{
+                                ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作失败',
+                                });
+                        }
                   }
+                  
     }
   },
   async mounted(){
@@ -111,6 +135,9 @@ export default {
                   const temp_record = await this.$http.get(url);
                   if(temp_record.body){
                     this.comments = temp_record.body.comments;
+                    this.score = temp_record.body.score;
+                    this.v_score = temp_record.body.score;
+                    this.state = temp_record.body.state;
                   }
           }
   

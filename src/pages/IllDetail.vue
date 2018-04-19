@@ -14,17 +14,17 @@
                   <r-textarea placeholder="请假事由" :required="true" :readonly="isReadlony" :model="this"  value="reason" :height="200" :max="300"></r-textarea>
               </card>
 
-              <card title="上传病假单" v-if="showBill">
+              <card title="上传病假单" v-if="isStudent">
                   <upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" v-if="!isReadlony"/>
-                  <r-image :list="leaveImg" v-if="isReadlony"/>
               </card>
 
                    <cell type="row" :vertical="true" v-if="!isStudent">
                                 <cell>
                                   <box>
-                                      <r-button :onClick="approve" >审核通过</r-button>
+                                      <r-button v-if="state==0" :onClick="approve" >审核通过</r-button>
+                                      <r-button v-if="state==0" :onClick="reject" type="danger">审核拒绝</r-button>
+                                      <r-button :onClick="download" >下载病假单</r-button>
 
-                                      <r-button :onClick="reject" type="danger">审核拒绝</r-button>
                                   </box>
                                 </cell>
                     </cell>
@@ -63,6 +63,7 @@ import {
 import {Upload} from "rainbow-mobile-upload";
 import Top from "../components/Top.vue";
 import Util from "../util/util";
+import Vue from 'vue';
 
 export default {
   components: {
@@ -83,6 +84,7 @@ export default {
   },
   data() {
     return {
+      state:null,
       leavePath:null,
       leaveStartDate:null,
       leaveEndDate:null,
@@ -98,6 +100,10 @@ export default {
       if(this.leaveType==1){
         this.showBill = true;
       }
+    },
+    download(){
+        const id = this.$route.query.leaveId;
+        window.open(Vue.http.options.root+"/leave/download?leaveId="+id);
     },
     async submit() {
             if(!this.leavePath&&this.leaveType==1){
@@ -124,14 +130,12 @@ export default {
                 const leaveId = this.$route.query.leaveId;
                 const url = `leave/approval?auditReply=1`;
                 const leaves = await this.$http.post(url,[Number(leaveId)]);
-                console.log(leaves)
                 this.$router.back()
     },
      async reject() {
                 const leaveId = this.$route.query.leaveId;
                 const url = `leave/approval?auditReply=0`;
                 const leaves = await this.$http.post(url,[Number(leaveId)]);
-                console.log(leaves)
                 this.$router.back()
     },
     uploadSuccess(data){
@@ -148,19 +152,16 @@ export default {
       return Util.isStudent(this);
     }
   },
-  mounted(){
-         const leaves = sessionStorage.getItem("leaves");
-         const leaveId = this.$route.query.leaveId;
-         if(!_.isEmpty(leaves)&&!_.isEmpty(leaveId)){
-           const leave =  _.find(JSON.parse(leaves),(leave)=>{
-               return leave.leaveId==leaveId;
-            })
-           this.leaveType = leave.leaveType;
-           this.reason = leave.reason;
-           this.leaveEndDate = leave.leaveEndDate;
-           this.leaveStartDate = leave.leaveStartDate;
-           this.leaveImg = [{"class":"index","src":leave.imgUrl}];
-         }
+  async mounted(){
+           const leaveId = this.$route.query.leaveId;
+           const leave = await this.$http.get("leave/detail?leaveId="+leaveId);
+        
+           this.state=leave.body.state;
+           this.leaveType = leave.body.leaveType;
+           this.reason = leave.body.reason;
+           this.leaveEndDate = leave.body.leaveEndDate;
+           this.leaveStartDate = leave.body.leaveStartDate;
+           this.leaveImg = [{"class":"index","src":leave.body.imgUrl}];
   }
 };
 </script>

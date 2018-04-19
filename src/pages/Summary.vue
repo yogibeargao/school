@@ -2,13 +2,12 @@
   <page>
       <top title="实习总结" :showBack="true"/>
       <r-body>
-
- 
-                  <r-textarea placeholder="请输入实习总结描述" :model="this" value="name" :height="580" :max="600"></r-textarea>
-      </r-body>
-             <tab-bar>
+             <r-input title="分数"  :max="100" :min="0"  :model="this" value="score" :isNumber="true"/>
+             <r-textarea placeholder="请输入实习总结评价或者打回理由" :model="this" value="comments" :height="600" :max="600"></r-textarea>
+       </r-body>
+             <tab-bar v-if="!score">
                   <div class="example-simple">
-    <div class="upload">
+    <div class="upload" >
       <ul>
         <li v-for="file in files" :key="file.id">
           <span>{{file.name}}</span> -
@@ -23,8 +22,6 @@
       <div class="example-btn">
         <file-upload
           class="btn btn-primary"
-          extensions="gif,jpg,jpeg,png,webp"
-          accept="image/png,image/gif,image/jpeg,image/webp"
           :multiple="false"
           :size="1024 * 1024 * 10"
           v-model="files"
@@ -65,7 +62,7 @@ import {
   DateTime,
   Grid,
   Card,
-  RTable,
+  RInput,
   Selecter,
   RBody
 } from "rainbow-mobile-core";
@@ -83,37 +80,28 @@ export default {
     Card,
     Box,
     RButton,
-    RTable,
     DateTime,
     Selector,
     RTextarea,
     TabBar,
     Cell,
     RBody,
-    FileUpload
+    FileUpload,
+    RInput
   },
   data() {
     return {
       files: [],
+      score:null,
+      comments:null
     };
   },
   methods: {
-      customAction(file, component){
+      async customAction(file, component){
        const self = this;
-       const reader = new FileReader();
-       reader.readAsBinaryString(file.file);
-
-    reader.onload = async function()
-    {
-      const formData = new FormData();
-      formData.append('file', this.result);
-             return await self.$http.post(`intern/summary/upload?filename=name`,formData);
-
-    };
-
-       
-     
-
+       const formData = new FormData();
+      formData.append('file', file.file);
+             return await self.$http.post(`intern/summary/upload?filename=${file.name}`,formData);
     },
    inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
@@ -146,8 +134,13 @@ export default {
       }
     }
   },
-  mounted(){
-    //设置formData数据
+  async mounted(){
+                  const url = "intern/summary/stu";
+                  const temp_record = await this.$http.get(url);
+                  if(temp_record.body){
+                    this.comments = temp_record.body.comments;
+                    this.score = temp_record.body.score;
+                  }
   },
   
 

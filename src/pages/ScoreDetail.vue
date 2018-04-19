@@ -2,10 +2,10 @@
   <page>
       <top title="实习评价" :showBack="true"/>
       <r-body>
-            <r-input title="分数" :required="true" :max="100" :min="0"  :model="this" value="score" :isNumber="true"/>
+            <r-input title="分数" :required="true" :max="100" :min="0"  :model="this" value="schoolScore" :isNumber="true"/>
              <r-textarea placeholder="请输入评价" :model="this" value="comments" :height="600" :max="600"></r-textarea>
       </r-body>
-             <tab-bar>
+             <tab-bar v-if="!schoolScore">
                   <cell type="row" :vertical="true">
                                 <cell >
                                   <box >
@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      score: null,
+      schoolScore: null,
       comments: null,
     };
   },
@@ -69,8 +69,19 @@ export default {
                      this.$router.back(-1);
                   }
     }
+  },
+  async mounted(){
+          const id = this.$route.query.id;
+          if(id){
+                  const url = "intern/score/detail?studentSchoolScoreId="+id;
+                  const temp_record = await this.$http.get(url);
+                  if(temp_record.body){
+                    this.comments = temp_record.body.comments;
+                    this.schoolScore = temp_record.body.schoolScore;
+                  }
+          }
+  
   }
 };
 </script>
-
 

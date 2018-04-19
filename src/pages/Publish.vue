@@ -3,9 +3,9 @@
       <top title="信息发布" :showBack="true"/>
       <r-body>
               <card>
-                  <selector title="发布对象" :options="target" :model="this.publish" value="target"  ></selector>
+                  <selector title="发布对象" :options="_target" :model="this.publish" value="target"  ></selector>
                   <row title="班级" :model="this" value="v_classes"  :onClick="showClass" :isLink="true" v-if="this.publish.target==3"></row>
-                  <selector title="发布源" :options="source" :model="this.publish" value="source"  ></selector>
+                  <selector v-if="_source" title="发布源" :options="source" :model="this.publish" value="source"  ></selector>
               </card>
               
               <card>
@@ -93,6 +93,22 @@ export default {
       source:[{"key":"0","value":"学校"},{"key":"1","value":"教务"},{"key":"2","value":"系部"}],
       target:[{"key":"0","value":"全体师生"},{"key":"1","value":"全体教师"},{"key":"2","value":"全体学生"},{"key":"3","value":"班级学生"}],
     };
+  },
+  computed:{
+      _target(){
+          if(Util.isTeacher(this)){
+              return [{"key":"3","value":"班级学生"}];
+          }else{
+              return  this.target;
+          }
+      },
+      _source(){
+           if(Util.isTeacher(this)){
+              return false
+          }else{
+              return  true
+          }
+      }
   },
   methods: {
     onChange() {

@@ -50,15 +50,16 @@ export default {
   },
   methods :{
     async changPhone(){
-                  const user = JSON.parse(sessionStorage.getItem("user"));
-                  const param = {"studentNos":[user.identityId],"pageNo":1,"pageSize":30};
-                  const phones = await this.$http.post(`user/changephone/list`,param);
-                  if(_.size(phones.body)>0){
-                       ConfirmApi.show(this,{
-                        title: '',
-                        content: '不能重复申请',
-                       });
-                  }else{
+                  // const user = JSON.parse(sessionStorage.getItem("user"));
+                  // const param = {"studentNos":[user.identityId],"pageNo":1,"pageSize":30};
+                  // const phones = await this.$http.post(`user/changephone/list`,param);
+                  // console.log(phones.body)
+                  // if(_.size(phones.body)>0){
+                  //      ConfirmApi.show(this,{
+                  //       title: '',
+                  //       content: '不能重复申请',
+                  //      });
+                  // }else{
                         const url = "user/changephone";
                         const changephone = await this.$http.post(url);
                         if(changephone.body){
@@ -72,7 +73,7 @@ export default {
                             content: '申请失败',
                           });
                         }
-                  }
+                  // }
 
 
                

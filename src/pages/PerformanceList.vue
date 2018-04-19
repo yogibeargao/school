@@ -2,7 +2,7 @@
   <page>
       <top title="实习评价列表" :showBack="true"/>
       <r-body>
-              <search :condition="condition" :callBack="search"/>
+              <search :condition="condition" :callBack="search" :showTime="false"/>
               <card>
                   <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
               </card>

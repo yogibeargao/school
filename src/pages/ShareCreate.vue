@@ -80,7 +80,7 @@ export default {
         this.show=true;
     },
     async onConfirm(){
-       const status = await this.$http.post(`location/sharing/create`,{"studentNos":this.condition.student});
+       const status = await this.$http.post(`location/sharing/create`,{"studentNos":this.condition.student_Nos});
       if(status){
         this.toastText="发起成功";
         this.showFlag=true;

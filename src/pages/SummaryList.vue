@@ -72,9 +72,8 @@ export default {
                   const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
                   const status = await this.$http.post(`intern/summary/list`,param);
                   const status_data = [];
-                  console.log(status.body)
                   _.each(status.body,(student,index)=>{
-                      status_data.push([{'text':student.studentName},{'text':student.state?'已批阅':'未批阅'},{'text':"查看","link":"/summary/detail?id="+student.id}])
+                      status_data.push([{'text':student.studentName},{'text':student.state==1?'已批阅':'未批阅'},{'text':"查看","link":"/summary/detail?id="+student.id}])
                   })
                   this.data.body = status_data;
                   sessionStorage.setItem("summary_data",JSON.stringify(status_data));

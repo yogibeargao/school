@@ -1,8 +1,8 @@
 <template>
   <page>
-      <top title="学生记录" :showBack="true"/>
+      <top title="实习记录" :showBack="true"/>
         <r-body>
-                <search :condition="condition" :callBack="search"/>
+                <search :condition="condition" :callBack="search" :showClass="isShowClass"/>
                 <card>
                   <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
                 </card>
@@ -62,10 +62,15 @@ export default {
       commons:""
     };
   },
+  computed:{
+      isShowClass(){
+        return !Util.isCompany(this);
+      }
+  },
   methods:{
       async search(condition){
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
+                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":30} 
                   const list = await this.$http.post(`intern/detail/list`,param);
                   
                   this.data.body = _.map(list.body,(s)=>{

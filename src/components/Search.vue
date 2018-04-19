@@ -102,8 +102,14 @@ export default {
     onChange(){
                   const v_student_List = [];
                   const student_Nos = [];
+                  let all_student_Nos = [];
+                  let all_student_flag = false;
                   _.each(this.students,(cla)=>{
                       _.each(this.condition.student,(pcla)=>{
+                            all_student_Nos.push(cla.key);
+                            if(cla.key=='all'){
+                                all_student_flag = true;
+                            }
                             if(pcla==cla.key){
                                   v_student_List.push(cla.value);
                                   student_Nos.push(cla.key);
@@ -112,6 +118,10 @@ export default {
                   });
                   this.v_student = _.isEmpty(v_student_List)?"":v_student_List.join(",");
                   this.condition.student_Nos = student_Nos;
+                  if(all_student_flag){
+                      all_student_Nos.shift();
+                    this.condition.student_Nos = all_student_Nos;
+                  }
                   this.condition.v_student = this.v_student;
                   if(!_.isEmpty(student_Nos)){
                      this.search();
@@ -122,6 +132,7 @@ export default {
                   const identityId = Util.getIdentityId(this);
                   const students = await this.$http.get(`user/class/students?identityId=${identityId}&&classNo=${this.condition.class}`);
                   const _students = [];
+                  _students.push({"key":'all',"value":"全部学生"})
                   _.each(students.body,(stu)=>{
                       _students.push({"key":stu.studentNo,"value":stu.studentName})
                   });
@@ -129,7 +140,6 @@ export default {
     }
   },
   async mounted(){
-      console.log(this.showClass)
                 if(this.showClass){
                     const identityId = Util.getIdentityId(this);
                     const classes = await this.$http.get(`user/teacherclass?identityId=${identityId}`);

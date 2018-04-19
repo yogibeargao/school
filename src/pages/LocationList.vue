@@ -57,7 +57,7 @@ export default {
   methods:{
    async search(condition){
                   const identityId = Util.getIdentityId(this);
-                  const param = {"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
+                  const param = {"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":30} 
                   const status = await this.$http.post(`online/signin/list`,param);
                   const status_data = [];
                   _.each(status.body,(student,index)=>{
