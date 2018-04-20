@@ -58,7 +58,7 @@ export default {
       options: [{ key: 0, value: "未评价" }, { key: 1, value: "已评价" }],
       data:{
         "head":[
-          [{'text':'姓名'},{'text':'班级'},{'text':'状态'}]
+          [{'text':'姓名'},{'text':'状态'},{'text':'操作'}]
         ],
         "body":[]
       },
@@ -72,9 +72,8 @@ export default {
                   const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
                   const status = await this.$http.post(`intern/attendenceAppraisal/list`,param);
                   const status_data = [];
-                  console.log(status.body)
                   _.each(status.body,(student,index)=>{
-                      status_data.push([{'text':student.studentName},{'text':student.signAddress?student.signAddress:'未评价'}])
+                      status_data.push([{'text':student.studentName},{'text':student.comments?'已评价':'未评价'},{'text':"查看","link":"/performance/detail?id="+student.id+"&studentNo="+student.studentNo}])
                   })
                   this.data.body = status_data;
                   sessionStorage.setItem("appraisal_data",JSON.stringify(status_data));
@@ -82,10 +81,10 @@ export default {
     }
   },
    mounted(){
-    const recordList = sessionStorage.getItem("appraisal_data");
-    if(recordList){
-        this.data.body = JSON.parse(recordList);
-    }
+    // const recordList = sessionStorage.getItem("appraisal_data");
+    // if(recordList){
+    //     this.data.body = JSON.parse(recordList);
+    // }
   }
 };
 </script>

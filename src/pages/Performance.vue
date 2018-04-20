@@ -2,13 +2,16 @@
   <page>
       <top title="实习表现" :showBack="true"/>
       <r-body>
+           <card title="实习评价">
+                  <r-input title="分数:" :isReadOnly="true"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
+                  <r-textarea title="评价:" :isReadOnly="true" :model="this" value="comments" :height="600" :max="600"></r-textarea>
+            </card>
             <card title="请假表现">
                   <div id="ill" style="width: 100%;height:270px;"></div>
             </card>
             <card title="记录表现">
                   <div id="record" style="width: 100%;height:270px;"></div>
             </card>
-          
       </r-body>
            
           
@@ -16,7 +19,7 @@
 </template>
 
 <script>
-import { Page, RBody,RImage, RButton,RTextarea, Cell, Box, MenuBar,TabBar,Card,RTable } from "rainbow-mobile-core";
+import { Page, RBody,RImage,RInput,RButton,RTextarea, Cell, Box, MenuBar,TabBar,Card,RTable } from "rainbow-mobile-core";
 import  Top from '../components/Top.vue';
 export default {
   components: {
@@ -29,14 +32,16 @@ export default {
     TabBar,
     Cell,
     RTextarea,
-    RBody
+    RBody,
+    RInput
   },
   data(){
       return {
-          name:null
+          comments:null,
+          v_score:null
       }
   },
-  mounted (){
+  async mounted (){
         const myChart = echarts.init(document.getElementById('ill'));
         const option = {
             title: {
@@ -104,7 +109,14 @@ export default {
 };
 
         record.setOption(recordOption);
+          const url = "intern/attendenceAppraisal/stu";
+                  const temp_record = await this.$http.get(url);
+                  if(temp_record.body){
+                    this.comments = temp_record.body.comments;
+                    this.v_score = temp_record.body.score;
+                  }
   }
+ 
 };
 </script>
 

@@ -18,6 +18,7 @@ const SummaryList = r => require.ensure([], () => r(require('@/pages/SummaryList
 const SummaryDetail = r => require.ensure([], () => r(require('@/pages/SummaryDetail')), 'SummaryDetail');
 const Password = r => require.ensure([], () => r(require('@/pages/Password')), 'Password');
 const Performance = r => require.ensure([], () => r(require('@/pages/Performance')), 'Performance');
+const PerformanceDetail = r => require.ensure([], () => r(require('@/pages/PerformanceDetail')), 'PerformanceDetail');
 const PerformanceList = r => require.ensure([], () => r(require('@/pages/PerformanceList')), 'PerformanceList');
 const Notes = r => require.ensure([], () => r(require('@/pages/Notes')), 'Notes');
 const NotesDetail = r => require.ensure([], () => r(require('@/pages/NotesDetail')), 'NotesDetail');
@@ -40,6 +41,11 @@ const router = new Router({
       path: '/',
       name: 'Login',
       component: Login,
+    },
+    {
+      path: '/performance/detail',
+      name: 'PerformanceDetail',
+      component: PerformanceDetail,
     },
     {
       path: '/performance/list',
