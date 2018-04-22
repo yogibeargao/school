@@ -3,20 +3,20 @@
       <top title="记录详情" :showBack="true"/>
       <r-body>
               <card>
-                  <date-time :readonly="isShow"  title='开始时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="startDateStr" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
-                  <date-time  :readonly="isShow" title='结束时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="endDateStr" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
+                  <date-time :readonly="!isShow"  title='开始时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="startDateStr" :minuteList="['00', '15', '30', '45']"></date-time>
+                  <date-time  :readonly="!isShow" title='结束时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="endDateStr"  :minuteList="['00', '15', '30', '45']"></date-time>
               </card>
               <card>
-                  <r-textarea title='实习描述:' :readonly="isShow" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
+                  <r-textarea title='实习描述:' :readonly="!isShow" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
               </card>
                 <card>
-                  <r-textarea title='实习评价:' v-if="isShow" :readonly="isShow" placeholder="请在这里输入实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
+                  <r-textarea title='实习评价:' v-if="isShow" :readonly="!isShow" placeholder="请在这里输入实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
               </card>
       </r-body>
                             <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
-              <tab-bar v-if="!isShow">
-                <cell type="row" :vertical="true">
+              <tab-bar v-if="isShow">
+                <cell type="row" :vertical="true" >
                               <cell >
                                   <box >
                                       <r-button :onClick="submit">提交</r-button>
@@ -51,9 +51,11 @@ export default {
   data() {
     return {
       record:{},
+      isShow:false,
       toastText:"操作失败",
       type : "warn",
-      showFlag:false
+      showFlag:false,
+      apprisal:false
     };
   },
   methods :{
@@ -74,10 +76,7 @@ export default {
     }
   },
   computed:{
-      isShow(){
-        const id = this.$route.query.id;
-        return id?true:false;
-      }
+      
   },
    async mounted(){
           const id = this.$route.query.id;
@@ -88,8 +87,16 @@ export default {
                     temp_record.body.startDateStr = temp_record.body.startDateStr?temp_record.body.startDateStr.substring(0,16):"";
                     temp_record.body.endDateStr = temp_record.body.endDateStr?temp_record.body.endDateStr.substring(0,16):"";
                     this.record = temp_record.body;
+                    this.apprisal = temp_record.body.apprisal;
                   }
+             
+                  
           }
+  },
+  async created(){
+                  const auditUrl = "user/processaudit?processCode=interndetail";
+                  const audit = await this.$http.get(auditUrl);
+                  this.isShow = audit.body;
   }
 };
 </script>

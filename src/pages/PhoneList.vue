@@ -9,7 +9,20 @@
                   <card>
                       <r-table :data="data" />
                   </card>  
-
+          <tab-bar v-if="isShow">
+                  <cell type="row" :vertical="true">
+                                <cell>
+                                  <box >
+                                      <r-button :onClick="approve">全部通过</r-button>
+                                  </box>
+                                </cell>
+                                 <cell>
+                                  <box >
+                                      <r-button type='danger' :onClick="reject">全部拒绝</r-button>
+                                  </box>
+                                </cell>
+                    </cell>
+              </tab-bar>
       </r-body>         
   
      
@@ -46,7 +59,7 @@ export default {
       condition:{},
         data:{
         "head":[
-          [{'text':'姓名'},{'text':'状态'},{'text':'同意'},{'text':'拒绝'}]
+          [{'text':'姓名'},{'text':'申请时间'},{'text':'状态'}]
         ],
         "body":[]
       },
@@ -54,66 +67,86 @@ export default {
       startDate:null,
       name:[],
       students:[],
-      v_student:[],
+      auditId:[],
       phone:{},
       show:false,
       showFlag:false,
       toastText:"",
       status:0,
-      showDialog:false
+      showDialog:false,
+      isShow:false
     };
   },
   methods :{
     async search(condition){
-                  const param = {"status":this.status,"studentNos":condition.student_Nos,"pageNo":1,"pageSize":30};
+                  const param = {"status":this.status,"studentNos":condition.student_Nos,"pageNo":1,"pageSize":50};
                   const phones = await this.$http.post(`user/changephone/list`,param);
                   if(_.size(phones.body)>0){
                       const phone_data = [];
                       _.each(phones.body,(student,index)=>{
-                          phone_data.push([{'text':student.studentName},{'text':student.status==0?"未审批":"已审批"},
-                          student.status==0?{'id':student.auditId,'text':"拒绝",'onClick':this.reject}:{},
-                          student.status==0?{'id':student.auditId,'text':"同意",'onClick':this.approve}:{}
+                          phone_data.push(
+                            [{'text':student.studentName},{'text':student.updateTime?student.updateTime:""},{'text':student.auditReply?student.auditReply:"未审批"}
                           ])
+                          this.auditId.push(student.auditId)
                       })
                       this.data.body = phone_data;
                   }
                   
     },
    
-    async approve(item){
-
-      const changephone = await this.$http.post(`user/changephone/approval?auditReply=1`,[item.id]);
-       if(changephone.body){
-                            ConfirmApi.show(this,{
-                            title: '',
-                            content: '操作成功',
-                          });
-                          this.search(this.condition);
-                        }else{
-                          ConfirmApi.show(this,{
-                            title: '',
-                            content: '操作失败',
-                          });
-       }
+    async approve(){
+      if(!_.isEmpty(this.auditId)){
+            const changephone = await this.$http.post(`user/changephone/approval?auditReply=1`,this.auditId);
+            if(changephone.body){
+                                  ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作成功',
+                                });
+                                this.search(this.condition);
+                              }else{
+                                ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作失败',
+                                });
+            }
+      }else{
+          ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '请筛选学生',
+           });
+      }
+    
     },
-    async reject(item){
-        const changephone = await this.$http.post(`user/changephone/approval?auditReply=0`,[item.id]);
-       if(changephone.body){
-                            ConfirmApi.show(this,{
-                            title: '',
-                            content: '操作成功',
-                          });
-                           this.search(this.condition);
-                        }else{
-                          ConfirmApi.show(this,{
-                            title: '',
-                            content: '操作失败',
-                          });
-       }
+    async reject(){
+       if(!_.isEmpty(this.auditId)){
+             const changephone = await this.$http.post(`user/changephone/approval?auditReply=0`,this.auditId);
+            if(changephone.body){
+                                  ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作成功',
+                                });
+                                this.search(this.condition);
+                              }else{
+                                ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作失败',
+                                });
+            }
+      }else{
+           ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '请筛选学生',
+           });
+      }
+     
     }
     
   },
-  
+  async created(){
+                  const url = "user/processaudit?processCode=userphoneaudit";
+                  const temp_record = await this.$http.get(url);
+                  this.isShow = temp_record.body;
+  }
 };
 </script>
 

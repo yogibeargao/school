@@ -3,7 +3,9 @@
       <top title="学生成绩" :showBack="true"/>
       <r-body>
               <search :condition="condition" :callBack="search" :showTime="false"/>
-              
+              <card>
+                      <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
+               </card>
               <card>
                    <r-table :data="data" />
               </card>
@@ -62,9 +64,10 @@ export default {
       showDialog: false,
       condition: {},
       v_student: null,
-      class: null,
+      status: null,
       classes:[],
       student:null,
+      options: [{ key: 0, value: "未打分" }, { key: 1, value: "已打分" }],
       data:{
         "head":[
           [{'text':'姓名'},{'text':'分数'},{'text':'操作'}]
@@ -76,11 +79,11 @@ export default {
   },
   methods: {
      async search(condition){
-                  const param = {"classId":condition.class,"studentNos":condition.student_Nos,"pageNo":1,"pageSize":30};
+                  const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"pageNo":1,"pageSize":50};
                   const scores = await this.$http.post(`intern/score/list`,param);
                   const scores_data = [];
                   _.each(scores.body,(score,index)=>{
-                      scores_data.push([{'text':score.studentName},{'text':score.schoolScore},{'text':'打分','link':"/score/detail?id="+score.id}])
+                      scores_data.push([{'text':score.studentName},{'text':score.schoolScore},{'text':score.schoolScore?'查看':'打分','link':"/score/detail?id="+score.id}])
                   })
                   this.data.body = scores_data;
                   sessionStorage.setItem("scores_data",JSON.stringify(scores_data));

@@ -3,7 +3,7 @@
       <top title="请假列表" :showBack="true"/>
 <r-body>
               
-               <search :condition="condition" :callBack="flash" :showClass="false"/>
+               <search :condition="condition" :callBack="flash" :showClass="!isStudent"/>
 
                <card>
                   <selector  title="状态" :options="options" :model="this" value="type" :onChange="flash"></selector>
@@ -56,7 +56,7 @@ export default {
       },
       condition:{},
       type:null,
-      options: [{ key: 0, value: "未通过" }, { key: 1, value: "已通过" }],
+      options: [{ key: 0, value: "未审批" }, { key: 1, value: "已审批" }],
       class:[],
       name:[],
       flag:false
@@ -101,7 +101,7 @@ export default {
             _.each(leaves.body,(leave)=>{
               leave.leaveStartDate = leave.leaveStartDate?leave.leaveStartDate.substring(0,16):"";
               leave.leaveEndDate = leave.leaveEndDate?leave.leaveEndDate.substring(0,16):"";
-              loadLeaves.push([{'text':leave.studentName},{'text':leave.leaveStartDate},{'text':leave.state==1?'已通过':'未通过','link':'/ill/detail?leaveId='+leave.leaveId}])
+              loadLeaves.push([{'text':leave.studentName},{'text':leave.leaveStartDate},{'text':leave.auditReply?leave.auditReply:"查看",'link':'/ill/detail?leaveId='+leave.leaveId}])
             })
             if(!_.isEmpty(leaves.body)){
               sessionStorage.setItem("leaves",JSON.stringify(loadLeaves));

@@ -54,7 +54,7 @@ export default {
   async mounted(){
                 const identityId = Util.getIdentityId(this);
                 const url = `intern/detail/list`;
-                const list = await this.$http.post(url,{"studentNos":[identityId],"pageNo":1,"pageSize":30});
+                const list = await this.$http.post(url,{"studentNos":[identityId],"pageNo":1,"pageSize":50});
                 if(list.body){
                     this.data.body = _.map(list.body,(s)=>{
                         s.startDate = s.startDate?s.startDate.substring(0,16):"";

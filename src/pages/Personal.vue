@@ -51,7 +51,7 @@ export default {
   methods :{
     async changPhone(){
                   // const user = JSON.parse(sessionStorage.getItem("user"));
-                  // const param = {"studentNos":[user.identityId],"pageNo":1,"pageSize":30};
+                  // const param = {"studentNos":[user.identityId],"pageNo":1,"pageSize":50};
                   // const phones = await this.$http.post(`user/changephone/list`,param);
                   // console.log(phones.body)
                   // if(_.size(phones.body)>0){
@@ -89,6 +89,7 @@ export default {
                 this.isStudent = Util.isStudent(this);
                 if(this.isStudent){
                     this.user = signList.body.student;
+                    this.user.phoneNo = this.user.phoneNo+"    点击更换";
                 }else{
                     this.user = signList.body.teacher;
                 }

@@ -150,13 +150,13 @@ export default {
             this.showFlag = true;
             return false;
       }
-       if(_.isEmpty(this.publish.source)){
+       if(this._source&&_.isEmpty(this.publish.source)){
             this.toastText="发布源不能为空";
             this.type="warn";
             this.showFlag = true;
             return false;
       }
-       if(_.isEmpty(this.publish.target)){
+       if(this._target&&_.isEmpty(this.publish.target)){
             this.toastText="发布对象不能为空";
             this.type="warn";
             this.showFlag = true;

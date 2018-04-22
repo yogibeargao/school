@@ -69,7 +69,7 @@ export default {
     async search(condition) {
 
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":30} 
+                  const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":50} 
                   const status = await this.$http.post(`intern/attendenceAppraisal/list`,param);
                   const status_data = [];
                   _.each(status.body,(student,index)=>{

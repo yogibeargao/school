@@ -9,19 +9,9 @@
                 <card>
                       <r-table :data="data" />
                 </card>
-                <card v-if="!this.status">
-                  <r-textarea placeholder="请输入实习评价" :model="this" value="commons" :height="600" :max="600"></r-textarea>
-                </card>
+               
         </r-body>
-              <tab-bar v-if="!this.status">
-                <cell type="row" :vertical="true">
-                              <cell >
-                                  <box >
-                                      <r-button link="/record/evaluate">全部评价</r-button>
-                                  </box>
-                              </cell>
-                  </cell>
-             </tab-bar>
+             
   </page>
 </template>
 
@@ -70,11 +60,11 @@ export default {
   methods:{
       async search(condition){
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":30} 
+                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":50} 
                   const list = await this.$http.post(`intern/detail/list`,param);
                   
                   this.data.body = _.map(list.body,(s)=>{
-                        return [{'text':s.studentName},{'text':s.apprisal?'以评价':"未评价"},{'text':"查看","link":"/record/detail?id="+s.id}]
+                        return [{'text':s.studentName},{'text':s.apprisal?'已评价':"未评价"},{'text':"评价","link":"/record/detail?id="+s.id}]
                   })
                   sessionStorage.setItem("recordList",JSON.stringify(this.data.body));
     }

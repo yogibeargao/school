@@ -3,8 +3,8 @@
       <top title="实习表现" :showBack="true"/>
       <r-body>
            <card title="实习评价">
-                  <r-input title="分数:" :isReadOnly="true"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
-                  <r-textarea title="评价:" :isReadOnly="true" :model="this" value="comments" :height="600" :max="600"></r-textarea>
+                  <r-input title="分数:" :readonly="true"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
+                  <r-textarea title="评价:" :readonly="true" :model="this" value="comments" :height="300" :max="600"></r-textarea>
             </card>
             <card title="请假表现">
                   <div id="ill" style="width: 100%;height:270px;"></div>

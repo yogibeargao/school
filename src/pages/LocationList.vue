@@ -3,6 +3,9 @@
       <top title="签到查看" :showBack="true"/>
       <r-body>
                     <search :condition="condition" :callBack="search"/>
+                     <card>
+                        <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
+                    </card>
                     <card>
                                 <r-table :data="data" />
                     </card>  
@@ -40,9 +43,11 @@ export default {
   data() {
     return {
        condition:{},
+       status:0,
+       options: [{ key: 0, value: "未签到" }, { key: 1, value: "已签到" }],
         data:{
         "head":[
-          [{'text':'姓名'},{'text':'位置'}]
+          [{'text':'姓名'},{'text':'位置'},{'text':'时间'}]
         ],
         "body":[]
       }
@@ -57,11 +62,11 @@ export default {
   methods:{
    async search(condition){
                   const identityId = Util.getIdentityId(this);
-                  const param = {"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":30} 
+                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":50} 
                   const status = await this.$http.post(`online/signin/list`,param);
                   const status_data = [];
                   _.each(status.body,(student,index)=>{
-                      status_data.push([{'text':student.studentName},{'text':student.signAddress?student.signAddress:'未签到'}])
+                      status_data.push([{'text':student.studentName},{'text':student.signAddress?student.signAddress:'未签到'},{'text':student.signDate?student.signDate.substring(11,16):''}])
                   })
                   this.data.body = status_data;
                   // sessionStorage.setItem("class",this.class);

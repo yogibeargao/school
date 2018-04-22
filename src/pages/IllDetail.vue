@@ -3,33 +3,33 @@
       <top title="请假详情" :showBack="true"/>
       <r-body>
               <card>
-                  <date-time  title='开始时间' :required="true" :readonly="isReadlony" :model="this" value="leaveStartDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
-                  <date-time  title='结束时间' :required="true" :readonly="isReadlony" :model="this" value="leaveEndDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
+                  <date-time  title='开始时间' :required="true" :readonly="!isShow||!isStudent" :model="this" value="leaveStartDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
+                  <date-time  title='结束时间' :required="true" :readonly="!isShow||!isStudent" :model="this" value="leaveEndDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
               </card>
               <card>
-                  <selector  title="请假类型" :required="true" :readonly="isReadlony" :options="options" :model="this" value="leaveType" :onChange="type"></selector>
+                  <selector  title="请假类型" :required="true" :readonly="!isShow||!isStudent" :options="options" :model="this" value="leaveType" :onChange="type"></selector>
               </card>
            
               <card>
-                  <r-textarea placeholder="请假事由" :required="true" :readonly="isReadlony" :model="this"  value="reason" :height="200" :max="300"></r-textarea>
+                  <r-textarea placeholder="请假事由" :required="true" :readonly="!isShow||!isStudent" :model="this"  value="reason" :height="200" :max="300"></r-textarea>
               </card>
 
-              <card title="上传病假单" v-if="isStudent">
-                  <upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" v-if="!isReadlony"/>
+              <card title="上传病假单" v-if="isShowUpload&&isStudent">
+                  <upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" />
               </card>
 
-                   <cell type="row" :vertical="true" v-if="!isStudent">
+                   <cell type="row" :vertical="true" v-if="isShow&&!isStudent">
                                 <cell>
                                   <box>
                                       <r-button v-if="state==0" :onClick="approve" >审核通过</r-button>
                                       <r-button v-if="state==0" :onClick="reject" type="danger">审核拒绝</r-button>
-                                      <r-button :onClick="download" >下载病假单</r-button>
+                                      <r-button v-if="state==0" :onClick="download" >下载病假单</r-button>
 
                                   </box>
                                 </cell>
                     </cell>
       </r-body>
-             <tab-bar v-if="!isReadlony">
+             <tab-bar v-if="isShow&&isStudent">
                   <cell type="row" :vertical="true">
                                 <cell>
                                   <box>
@@ -84,6 +84,7 @@ export default {
   },
   data() {
     return {
+      isShow:false,
       state:null,
       leavePath:null,
       leaveStartDate:null,
@@ -95,6 +96,7 @@ export default {
       showBill:false
     };
   },
+
   methods: {
     type(){
       if(this.leaveType==1){
@@ -150,18 +152,31 @@ export default {
     },
     isStudent(){
       return Util.isStudent(this);
+    },
+    isShowUpload(){
+      return this.leaveType==1?true:false;
     }
   },
   async mounted(){
            const leaveId = this.$route.query.leaveId;
-           const leave = await this.$http.get("leave/detail?leaveId="+leaveId);
-        
-           this.state=leave.body.state;
-           this.leaveType = leave.body.leaveType;
-           this.reason = leave.body.reason;
-           this.leaveEndDate = leave.body.leaveEndDate;
-           this.leaveStartDate = leave.body.leaveStartDate;
-           this.leaveImg = [{"class":"index","src":leave.body.imgUrl}];
+           if(leaveId){
+                  const leave = await this.$http.get("leave/detail?leaveId="+leaveId);
+                  this.state=leave.body.state;
+                  this.leaveType = leave.body.leaveType;
+                  this.reason = leave.body.reason;
+                  this.leaveEndDate = leave.body.leaveEndDate;
+                  this.leaveStartDate = leave.body.leaveStartDate;
+                  this.leaveImg = [{"class":"index","src":leave.body.imgUrl}];
+                 
+           }else{
+                this.isShow = true;
+           }
+   
+  },
+  async created(){
+                  const url = "user/processaudit?processCode=leave";
+                  const temp_record = await this.$http.get(url);
+                  this.isShow = temp_record.body;
   }
 };
 </script>

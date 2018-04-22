@@ -2,17 +2,17 @@
   <page>
       <top title="实习总结评价" :showBack="true"/>
       <r-body>
-             <r-input title="分数"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
-             <r-textarea placeholder="请输入打回理由" :model="this" value="comments" :height="600" :max="600"></r-textarea>
+             <r-input title="分数:" :readonly="!isShow"   :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
+             <r-textarea title="评价:" :readonly="!isShow"  :model="this" value="comments" :height="600" :max="600"></r-textarea>
       </r-body>
              <tab-bar>
                   <cell type="row" :vertical="true">
-                                <cell v-if="!score">
+                                <cell v-if="!score&&isShow">
                                   <box >
                                       <r-button :onClick="submit">通过</r-button>
                                   </box>
                                 </cell>
-                                 <cell v-if="!score">
+                                 <cell v-if="!score&&isShow">
                                   <box >
                                       <r-button type='danger' :onClick="reject">打回</r-button>
                                   </box>
@@ -71,7 +71,8 @@ export default {
       comments: null,
       score:null,
       v_score:null,
-      state:null
+      state:null,
+      isShow:false
     };
   },
   methods: {
@@ -141,6 +142,11 @@ export default {
                   }
           }
   
+  },
+  async created(){
+                  const url = "user/processaudit?processCode=internsummary";
+                  const temp_record = await this.$http.get(url);
+                  this.isShow = temp_record.body;
   }
 };
 </script>

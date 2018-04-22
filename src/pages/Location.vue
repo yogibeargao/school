@@ -52,7 +52,7 @@ export default {
   async mounted(){
                 const identityId = Util.getIdentityId(this);
                 const url = `online/signin/list`;
-                const signList = await this.$http.post(url,{"identityId":identityId,"pageNo":1,"pageSize":30});
+                const signList = await this.$http.post(url,{"identityId":identityId,"pageNo":1,"pageSize":50});
                 if(signList.body){
                     this.data.body = _.map(signList.body,(s)=>{
                         return [{'text':s.signDate},{'text':s.signAddress}]

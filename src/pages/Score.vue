@@ -35,7 +35,7 @@ export default {
   async mounted(){
                 const identityId = Util.getIdentityId(this);
                 const url = `intern/score/list`;
-                const list = await this.$http.post(url,{"studentNos":[identityId],"pageNo":1,"pageSize":30});
+                const list = await this.$http.post(url,{"studentNos":[identityId],"pageNo":1,"pageSize":50});
                 if(list.body){
                   this.score = list.body[0].schoolScore?list.body[0].schoolScore+"":"还没出成绩";
                   this.list1 = [{

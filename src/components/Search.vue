@@ -5,8 +5,8 @@
                     <row title="学生" :model="this" value="v_student"  :onClick="showStudent" :isLink="true" ></row>
                 </card>
                 <card v-if="showTime">
-                  <date-time  title='开始时间' :model="this.condition" value="startDateStr" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']" :onChange="search"></date-time>
-                  <date-time  title='结束时间' :model="this.condition" value="endDateStr" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']" :onChange="search"></date-time>
+                  <date-time  title='开始时间' :model="this.condition" value="startDateStr" format="YYYY-MM-DD HH:mm:00"  :minuteList="['00', '15', '30', '45']" :onChange="search"></date-time>
+                  <date-time  title='结束时间' :model="this.condition" value="endDateStr" format="YYYY-MM-DD HH:mm:00"  :minuteList="['00', '15', '30', '45']" :onChange="search"></date-time>
                 </card>
                 <r-dialog :model="this" value="showDialog" :disableMask="false">
                     <checker :model="this.condition" value="student" :data='students' type="list" :onChange="onChange"/>

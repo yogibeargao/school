@@ -87,7 +87,7 @@ export default {
     },
     async loadMessage(){
             const identityId = Util.getIdentityId(this);
-            let param = {"identityId":identityId,"pageNo":1,"pageSize":30};
+            let param = {"identityId":identityId,"pageNo":1,"pageSize":50};
 
              if(this.isMessage){
                 if(this.readFilter){

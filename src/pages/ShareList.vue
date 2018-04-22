@@ -46,7 +46,7 @@ export default {
     return {
        data:{
         "head":[
-          [{'text':'姓名'},{'text':'地点'}]
+          [{'text':'姓名'},{'text':'地点'},{'text':'时间'}]
         ],
         "body":[]
       },
@@ -64,10 +64,11 @@ export default {
   methods:{
     async search(condition){
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":30} 
+                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":50} 
                   const list = await this.$http.post(`location/sharing/list`,param);
                   this.data.body = _.map(list.body,(s)=>{
-                        return [{'text':s.studentName},{'text':s.sharedAddress?s.sharedAddress:"未响应"}]
+                    console.log(s)
+                        return [{'text':s.studentName},{'text':s.sharedAddress?s.sharedAddress:"未响应"},{'text':s.responseTime?s.responseTime.substring(11,16):""}]
                   })
     }
   },

@@ -2,8 +2,8 @@
   <page>
       <top title="实习总结" :showBack="true"/>
       <r-body>
-             <r-input title="分数"  :max="100" :min="0"  :model="this" value="score" :isNumber="true"/>
-             <r-textarea placeholder="请输入实习总结评价或者打回理由" :model="this" value="comments" :height="600" :max="600"></r-textarea>
+             <r-input title="分数:" :readonly="true"   :max="100" :min="0"  :model="this" value="score" :isNumber="true"/>
+             <r-textarea title="评价:" :readonly="true"   :model="this" value="comments" :height="600" :max="600"></r-textarea>
        </r-body>
              <tab-bar v-if="!score">
                   <div class="example-simple">
