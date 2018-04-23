@@ -137,6 +137,7 @@ export default {
   async mounted(){
                   const url = "intern/summary/stu";
                   const temp_record = await this.$http.get(url);
+                  console.log(temp_record)
                   if(temp_record.body){
                     this.comments = temp_record.body.comments;
                     this.score = temp_record.body.score;

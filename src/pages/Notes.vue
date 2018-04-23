@@ -66,7 +66,7 @@ export default {
        if(source){
          return source.value;
        }else{
-         return id;
+         return '辅导员';
        }
     },
     _filter(){

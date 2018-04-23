@@ -72,14 +72,17 @@ export default {
       show:false,
       showFlag:false,
       toastText:"",
-      status:0,
+      status:null,
       showDialog:false,
       isShow:false
     };
   },
   methods :{
     async search(condition){
-                  const param = {"status":this.status,"studentNos":condition.student_Nos,"pageNo":1,"pageSize":50};
+                if(condition==0||condition==1){
+                      this.condition.status = condition;
+                  }
+                  const param = {"status":this.condition.status,"studentNos":this.condition.student_Nos,"pageNo":1,"pageSize":50};
                   const phones = await this.$http.post(`user/changephone/list`,param);
                   if(_.size(phones.body)>0){
                       const phone_data = [];

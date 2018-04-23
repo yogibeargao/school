@@ -107,7 +107,7 @@ export default {
                   _.each(this.students,(cla)=>{
                       _.each(this.condition.student,(pcla)=>{
                             all_student_Nos.push(cla.key);
-                            if(cla.key=='all'){
+                            if(!all_student_flag&&pcla=='all'){
                                 all_student_flag = true;
                             }
                             if(pcla==cla.key){

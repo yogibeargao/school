@@ -3,7 +3,7 @@
       <top title="请假列表" :showBack="true"/>
 <r-body>
               
-               <search :condition="condition" :callBack="flash" :showClass="!isStudent"/>
+               <search :condition="condition" :callBack="flash" :showClass="!isShowClass"/>
 
                <card>
                   <selector  title="状态" :options="options" :model="this" value="type" :onChange="flash"></selector>
@@ -65,6 +65,13 @@ export default {
   computed:{
     isStudent(){
       return Util.isStudent(this);
+    },
+    isShowClass(){
+       if(Util.isCompany(this)){
+          return true;
+       }else{
+          return Util.isStudent(this);
+       }
     }
   },
   methods:{

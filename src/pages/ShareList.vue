@@ -63,11 +63,13 @@ export default {
   },
   methods:{
     async search(condition){
+                  if(condition==0||condition==1){
+                      this.condition.status = condition;
+                  }
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":50} 
+                  const param = {"status":this.condition.status,"identityId":identityId,"classId":this.condition.class,"studentNos":this.condition.student_Nos,"startDateStr":this.condition.startDateStr,"endDateStr":this.condition.endDateStr,"pageNo":1,"pageSize":50} 
                   const list = await this.$http.post(`location/sharing/list`,param);
                   this.data.body = _.map(list.body,(s)=>{
-                    console.log(s)
                         return [{'text':s.studentName},{'text':s.sharedAddress?s.sharedAddress:"未响应"},{'text':s.responseTime?s.responseTime.substring(11,16):""}]
                   })
     }

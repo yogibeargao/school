@@ -3,19 +3,19 @@
       <top title="记录详情" :showBack="true"/>
       <r-body>
               <card>
-                  <date-time :readonly="!isShow"  title='开始时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="startDateStr" :minuteList="['00', '15', '30', '45']"></date-time>
-                  <date-time  :readonly="!isShow" title='结束时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="endDateStr"  :minuteList="['00', '15', '30', '45']"></date-time>
+                  <date-time :readonly="isreadonly"  title='开始时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="startDateStr" :minuteList="['00', '15', '30', '45']"></date-time>
+                  <date-time  :readonly="isreadonly" title='结束时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="endDateStr"  :minuteList="['00', '15', '30', '45']"></date-time>
               </card>
               <card>
-                  <r-textarea title='实习描述:' :readonly="!isShow" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
+                  <r-textarea title='实习描述:' :readonly="isreadonly" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
               </card>
                 <card>
-                  <r-textarea title='实习评价:'  :readonly="!isShow" placeholder="请在这里输入实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
+                  <r-textarea title='实习评价:' :readonly="isreadonly" placeholder="请在这里输入实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
               </card>
       </r-body>
                             <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
-              <tab-bar v-if="isShow">
+              <tab-bar v-if="isShow&&isStudent">
                 <cell type="row" :vertical="true" >
                               <cell >
                                   <box >
@@ -76,7 +76,13 @@ export default {
     }
   },
   computed:{
-      
+      isStudent(){
+      return Util.isStudent(this);
+      },
+      isreadonly(){
+        
+        return !(this.isShow&&this.isStudent);
+      }
   },
    async mounted(){
           const id = this.$route.query.id;
@@ -94,9 +100,15 @@ export default {
           }
   },
   async created(){
-                  const auditUrl = "user/processaudit?processCode=interndetail";
-                  const audit = await this.$http.get(auditUrl);
-                  this.isShow = audit.body;
+                  const id = this.$route.query.id;
+                  if(id){
+                      const auditUrl = "user/processaudit?processCode=interndetail";
+                      const audit = await this.$http.get(auditUrl);
+                      this.isShow = audit.body;
+                  }else if(this.isStudent){
+                      this.isShow = true;
+                  }
+                  
   }
 };
 </script>

@@ -2,7 +2,7 @@
   <page>
       <top title="签到查看" :showBack="true"/>
       <r-body>
-                    <search :condition="condition" :callBack="search"/>
+                    <search :condition="condition" :callBack="search" :showClass='!isShowClass'/>
                      <card>
                         <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
                     </card>
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
        condition:{},
-       status:0,
+       status:null,
        options: [{ key: 0, value: "未签到" }, { key: 1, value: "已签到" }],
         data:{
         "head":[
@@ -56,22 +56,25 @@ export default {
   computed :{
       disableButton(){
         return _.isEmpty(this.student);
+      },
+      isShowClass(){
+        return Util.isCompany(this);
       }
     
   },
   methods:{
    async search(condition){
+                  if(condition==0||condition==1){
+                      this.condition.status = condition;
+                  }
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":50} 
+                  const param = {"status":this.condition.status,"identityId":identityId,"classId":this.condition.class,"studentNos":this.condition.student_Nos,"startDateStr":this.condition.startDateStr,"endDateStr":this.condition.endDateStr,"pageNo":1,"pageSize":50} 
                   const status = await this.$http.post(`online/signin/list`,param);
                   const status_data = [];
                   _.each(status.body,(student,index)=>{
                       status_data.push([{'text':student.studentName},{'text':student.signAddress?student.signAddress:'未签到'},{'text':student.signDate?student.signDate.substring(11,16):''}])
                   })
                   this.data.body = status_data;
-                  // sessionStorage.setItem("class",this.class);
-                  // sessionStorage.setItem("student_Nos",JSON.stringify(student_Nos));
-                  // sessionStorage.setItem("status_data",JSON.stringify(status_data));
           }
   }
 };

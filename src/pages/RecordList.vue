@@ -48,7 +48,7 @@ export default {
       },
       condition:{},
       options: [{ key: 0, value: "未评价" }, { key: 1, value: "已评价" }],
-      status:1,
+      status:null,
       commons:""
     };
   },
@@ -59,8 +59,11 @@ export default {
   },
   methods:{
       async search(condition){
+                  if(condition==0||condition==1){
+                      this.condition.status = condition;
+                  }
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"identityId":identityId,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDateStr,"endDateStr":condition.endDateStr,"pageNo":1,"pageSize":50} 
+                  const param = {"status":this.condition.status,"identityId":identityId,"classId":this.condition.class,"studentNos":this.condition.student_Nos,"startDateStr":this.condition.startDateStr,"endDateStr":this.condition.endDateStr,"pageNo":1,"pageSize":50} 
                   const list = await this.$http.post(`intern/detail/list`,param);
                   
                   this.data.body = _.map(list.body,(s)=>{

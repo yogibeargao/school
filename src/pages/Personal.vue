@@ -7,6 +7,7 @@
             <row title="姓名" :model="this.user" value='teachername' v-if="!isStudent"/>
             <row title="性别" :model="this.user" value='sex'/>
             <row title="学号" :model="this.user" value='studentNo' v-if="isStudent"/>
+            <row title="班级" :model="this.user" value='className' v-if="isStudent"/>
             <row title="工号" :model="this.user" value='teacherNo' v-if="!isStudent"/>
             <row title="实习单位" :model="this.user" value='internShipUnit' v-if="isStudent"/>
             <row title="实习地址" :model="this.user" value='workAddress' v-if="isStudent"/>
@@ -89,7 +90,7 @@ export default {
                 this.isStudent = Util.isStudent(this);
                 if(this.isStudent){
                     this.user = signList.body.student;
-                    this.user.phoneNo = this.user.phoneNo+"    点击更换";
+                    this.user.phoneNo = this.user.phoneNo+"        点击更换";
                 }else{
                     this.user = signList.body.teacher;
                 }

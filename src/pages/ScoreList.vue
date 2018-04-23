@@ -79,7 +79,10 @@ export default {
   },
   methods: {
      async search(condition){
-                  const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"pageNo":1,"pageSize":50};
+                  if(condition==0||condition==1){
+                      this.condition.status = condition;
+                  }
+                  const param = {"status":this.condition.status,"classId":this.condition.class,"studentNos":this.condition.student_Nos,"pageNo":1,"pageSize":50};
                   const scores = await this.$http.post(`intern/score/list`,param);
                   const scores_data = [];
                   _.each(scores.body,(score,index)=>{

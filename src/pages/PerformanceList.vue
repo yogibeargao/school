@@ -53,7 +53,7 @@ export default {
   },
   data() {
     return {
-      status:0,
+      status:null,
       condition: {},
       options: [{ key: 0, value: "未评价" }, { key: 1, value: "已评价" }],
       data:{
@@ -67,9 +67,11 @@ export default {
   },
    methods: {
     async search(condition) {
-
+                  if(condition==0||condition==1){
+                      this.condition.status = condition;
+                  }
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.status,"classId":condition.class,"studentNos":condition.student_Nos,"startDateStr":condition.startDate,"endDateStr":condition.endDate,"pageNo":1,"pageSize":50} 
+                  const param = {"status":this.condition.status,"classId":this.condition.class,"studentNos":this.condition.student_Nos,"startDateStr":this.condition.startDate,"endDateStr":this.condition.endDate,"pageNo":1,"pageSize":50} 
                   const status = await this.$http.post(`intern/attendenceAppraisal/list`,param);
                   const status_data = [];
                   _.each(status.body,(student,index)=>{
