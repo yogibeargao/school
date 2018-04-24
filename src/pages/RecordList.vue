@@ -67,7 +67,6 @@ export default {
                   const list = await this.$http.post(`intern/detail/list`,param);
                   
                   this.data.body = _.map(list.body,(s)=>{
-                    console.log(s);
                         return [{'text':s.studentName},{'text':s.apprisal?'已评价':"未评价"},{'text':"查看","link":"/record/detail?id="+s.id}]
                   })
                   sessionStorage.setItem("recordList",JSON.stringify(this.data.body));

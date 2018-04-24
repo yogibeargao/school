@@ -9,13 +9,13 @@
               <card>
                   <r-textarea title='实习描述:' :readonly="isreadonly" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
               </card>
-                <card>
-                  <r-textarea title='实习评价:' :readonly="isreadonly" placeholder="请在这里输入实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
+                <card v-if='!isStudent||!isEdit'>
+                  <r-textarea title='实习评价:'  :readonly="isreadonly" placeholder="请在这里输入实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
               </card>
       </r-body>
                             <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
-              <tab-bar v-if="isShow&&isStudent">
+              <tab-bar v-if="isShow">
                 <cell type="row" :vertical="true" >
                               <cell >
                                   <box >
@@ -66,6 +66,7 @@ export default {
                   this.record.startDateStr = this.record.startDateStr+":00";
                   this.record.endDateStr = this.record.endDateStr+":00";
                   const temp_record = await this.$http.post(url,this.record);
+                  console.log(temp_record.body)
                   if(temp_record.body){
                       this.toastText="操作成功";
                       this.type = "success";
@@ -73,6 +74,25 @@ export default {
                   }else{
                       this.showFlag=true;
                   }
+
+                    const id = this.$route.query.id+"";
+                    const recordList = sessionStorage.getItem('recordList');
+                    debugger;
+                    if(recordList&&!this.signStat){
+                            const newRecordList = [];
+                            _.each(JSON.parse(recordList),(record)=>{
+                                const link_id = record[2].link.split('=')[1];
+                                if(link_id!=id){
+                                    newRecordList.push(record)
+                                }
+                            });
+                            if(!_.isEmpty(newRecordList)){
+                                sessionStorage.setItem('recordList',JSON.stringify(newRecordList)); 
+                            }
+                    }
+
+
+
     }
   },
   computed:{
@@ -80,8 +100,11 @@ export default {
       return Util.isStudent(this);
       },
       isreadonly(){
-        
-        return !(this.isShow&&this.isStudent);
+        return !this.isShow;
+      },
+      isEdit(){
+        const id = this.$route.query.id;
+        return id?false:true;
       }
   },
    async mounted(){
@@ -93,9 +116,11 @@ export default {
                     temp_record.body.startDateStr = temp_record.body.startDateStr?temp_record.body.startDateStr.substring(0,16):"";
                     temp_record.body.endDateStr = temp_record.body.endDateStr?temp_record.body.endDateStr.substring(0,16):"";
                     this.record = temp_record.body;
+                    this.signStat = temp_record.body.signStat;
                     this.apprisal = temp_record.body.apprisal;
                   }
-             
+                               console.log(temp_record.body)
+
                   
           }
   },

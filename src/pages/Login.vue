@@ -81,6 +81,10 @@ export default {
 
                     sessionStorage.setItem("user",JSON.stringify(login.body.userInfo));
                     sessionStorage.setItem("functions",JSON.stringify(login.body.functions));
+                    sessionStorage.removeItem("leaves");
+                    sessionStorage.removeItem("recordList");
+                    sessionStorage.removeItem("summary_data");
+                    
                     this.$router.push({"name":"Home","params":{identityId:login.body.userInfo.identityId,functions:login.body.functions}});
                   }else{
                     this.toastText= login.body.message;

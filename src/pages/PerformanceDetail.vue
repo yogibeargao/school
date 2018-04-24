@@ -1,6 +1,6 @@
 <template>
   <page>
-      <top title="实习总结评价" :showBack="true"/>
+      <top title="实习评价详情" :showBack="true"/>
       <r-body>
              <r-input title="分数"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
              <r-textarea placeholder="请输入评价" :model="this" value="comments" :height="600" :max="600"></r-textarea>

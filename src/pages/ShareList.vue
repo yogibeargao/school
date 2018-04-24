@@ -54,7 +54,7 @@ export default {
       options: [{ key: 0, value: "未响应" }, { key: 1, value: "已响应" }],
       showFlag:false,
       toastText:"",
-      status:0,
+      status:null,
       showDialog:false
     };
   },

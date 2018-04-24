@@ -6,7 +6,7 @@
                   <r-input title="分数:" :readonly="true"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
                   <r-textarea title="评价:" :readonly="true" :model="this" value="comments" :height="300" :max="600"></r-textarea>
             </card>
-            <card title="请假表现">
+            <card title="实习表现">
                   <div id="ill" style="width: 100%;height:270px;"></div>
             </card>
             <card title="记录表现">
@@ -45,20 +45,20 @@ export default {
         const myChart = echarts.init(document.getElementById('ill'));
         const option = {
             title: {
-                text: 'ECharts 入门示例'
+                text: '实习表现'
             },
             tooltip: {},
             legend: {
-                data:['销量']
+                data:['表现']
             },
             xAxis: {
-                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+                data: ["病假","事假","出勤","矿工"]
             },
             yAxis: {},
             series: [{
-                name: '销量',
+                name: '表现',
                 type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
+                data: [5, 20, 36, 10]
             }]
         };
         myChart.setOption(option);
@@ -71,11 +71,11 @@ export default {
     legend: {
         orient: 'vertical',
         x: 'left',
-        data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+        data:['优秀','良好','一般','较差','差']
     },
     series: [
         {
-            name:'访问来源',
+            name:'记录表现',
             type:'pie',
             radius: ['50%', '70%'],
             avoidLabelOverlap: false,
@@ -98,11 +98,11 @@ export default {
                 }
             },
             data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:234, name:'联盟广告'},
-                {value:135, name:'视频广告'},
-                {value:1548, name:'搜索引擎'}
+                {value:335, name:'优秀'},
+                {value:310, name:'良好'},
+                {value:234, name:'一般'},
+                {value:135, name:'较差'},
+                {value:1548, name:'差'}
             ]
         }
     ]

@@ -87,6 +87,11 @@ export default {
                             title: '',
                             content: '请输入成绩',
                           });
+                  }else if(!this.comments){
+                      ConfirmApi.show(this,{
+                            title: '',
+                            content: '请输入评价',
+                          });
                   }else{
                       const param = {"id":id,"score":this.v_score,"comments":this.comments,"state":1} 
                       const list = await this.$http.post(`intern/summary/appraisal`,param);
