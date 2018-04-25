@@ -78,7 +78,9 @@ export default {
   methods: {
     async download(){
         const id = this.$route.query.id;
-        window.open(Vue.http.options.root+"/intern/summary/download?internSummaryId="+id);
+        // window.open(Vue.http.options.root+"/intern/summary/download?internSummaryId="+id);
+        console.log(Vue.http.options.root+"/intern/summary/download?internSummaryId="+id)
+        window.location.href=Vue.http.options.root+"/intern/summary/download?internSummaryId="+id
     },
     async submit() {
                   const id = this.$route.query.id;

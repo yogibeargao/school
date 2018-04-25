@@ -66,7 +66,6 @@ export default {
                   this.record.startDateStr = this.record.startDateStr+":00";
                   this.record.endDateStr = this.record.endDateStr+":00";
                   const temp_record = await this.$http.post(url,this.record);
-                  console.log(temp_record.body)
                   if(temp_record.body){
                       this.toastText="操作成功";
                       this.type = "success";
@@ -77,7 +76,6 @@ export default {
 
                     const id = this.$route.query.id+"";
                     const recordList = sessionStorage.getItem('recordList');
-                    debugger;
                     if(recordList&&!this.signStat){
                             const newRecordList = [];
                             _.each(JSON.parse(recordList),(record)=>{
@@ -86,9 +84,8 @@ export default {
                                     newRecordList.push(record)
                                 }
                             });
-                            if(!_.isEmpty(newRecordList)){
-                                sessionStorage.setItem('recordList',JSON.stringify(newRecordList)); 
-                            }
+                                                            sessionStorage.setItem('recordList',JSON.stringify(newRecordList)); 
+
                     }
 
 

@@ -59,7 +59,7 @@ export default {
       condition:{},
         data:{
         "head":[
-          [{'text':'姓名'},{'text':'申请时间'},{'text':'状态'}]
+          [{'text':'姓名'},{'text':'状态'},{'text':'同意'},{'text':'拒绝'}]
         ],
         "body":[]
       },
@@ -87,17 +87,50 @@ export default {
                   if(_.size(phones.body)>0){
                       const phone_data = [];
                       _.each(phones.body,(student,index)=>{
+                          
                           phone_data.push(
-                            [{'text':student.studentName},{'text':student.updateTime?student.updateTime:""},{'text':student.auditReply?student.auditReply:"未审批"}
+                            [{'text':student.studentName},{'text':student.auditReply?student.auditReply:"未审批"},student.status==0?{'auditId':student.auditId,'text':"同意","onClick":this.approve}:{},student.status==0?{'text':"拒绝","onClick":this.reject}:{}
                           ])
                           this.auditId.push(student.auditId)
                       })
                       this.data.body = phone_data;
+                  }else{
+                    this.data.body = [];
                   }
                   
     },
-   
-    async approve(){
+
+     async approve(item){
+        const changephone = await this.$http.post(`user/changephone/approval?auditReply=1`,[item.auditId]);
+            if(changephone.body){
+                                  ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作成功',
+                                });
+                                this.search(this.condition);
+                              }else{
+                                ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作失败',
+                                });
+            }
+    },
+    async reject(item){
+       const changephone = await this.$http.post(`user/changephone/approval?auditReply=0`,[item.auditId]);
+            if(changephone.body){
+                                  ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作成功',
+                                });
+                                this.search(this.condition);
+                              }else{
+                                ConfirmApi.show(this,{
+                                  title: '',
+                                  content: '操作失败',
+                                });
+            }
+    },
+    async approves(){
       if(!_.isEmpty(this.auditId)){
             const changephone = await this.$http.post(`user/changephone/approval?auditReply=1`,this.auditId);
             if(changephone.body){
@@ -120,7 +153,7 @@ export default {
       }
     
     },
-    async reject(){
+    async rejects(){
        if(!_.isEmpty(this.auditId)){
              const changephone = await this.$http.post(`user/changephone/approval?auditReply=0`,this.auditId);
             if(changephone.body){
