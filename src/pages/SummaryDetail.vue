@@ -78,8 +78,6 @@ export default {
   methods: {
     async download(){
         const id = this.$route.query.id;
-        // window.open(Vue.http.options.root+"/intern/summary/download?internSummaryId="+id);
-        console.log(Vue.http.options.root+"/intern/summary/download?internSummaryId="+id)
         window.location.href=Vue.http.options.root+"/intern/summary/download?internSummaryId="+id
     },
     async submit() {
@@ -119,7 +117,7 @@ export default {
                             content: '请输入打回理由',
                           });
                   }else{
-                        const param = {"id":id,"score":this.v_score,"comments":this.comments,"state":0} 
+                        const param = {"id":id,"score":this.v_score,"comments":this.comments,"state":2} 
                         const list = await this.$http.post(`intern/summary/appraisal`,param);
                         if(list.body){
                                 ConfirmApi.show(this,{

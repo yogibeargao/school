@@ -60,36 +60,46 @@ export default {
   },
   methods :{
     async submit(){
+        let temp_record = null;
+        if(Util.isStudent(this)){
                   const url = "intern/detail/create";
                   const identityId = Util.getIdentityId(this);
                   this.record["studentNo"]= identityId;
                   this.record.startDateStr = this.record.startDateStr+":00";
                   this.record.endDateStr = this.record.endDateStr+":00";
-                  const temp_record = await this.$http.post(url,this.record);
+                   temp_record = await this.$http.post(url,this.record);
+        }else{
+                              const id = this.$route.query.id+"";
+
+                   const url = "intern/detail/appraisal/create?internDetailId="+id+"&comments="+this.record.apprisal;
+                   temp_record = await this.$http.post(url);
+        }
+
+               
                   if(temp_record.body){
                       this.toastText="操作成功";
                       this.type = "success";
                       this.showFlag=true;
+                      this.$router.back()
                   }else{
                       this.showFlag=true;
                   }
 
-                    const id = this.$route.query.id+"";
-                    const recordList = sessionStorage.getItem('recordList');
-                    if(recordList&&!this.signStat){
-                            const newRecordList = [];
-                            _.each(JSON.parse(recordList),(record)=>{
-                                const link_id = record[2].link.split('=')[1];
-                                if(link_id!=id){
-                                    newRecordList.push(record)
-                                }
-                            });
-                                                            sessionStorage.setItem('recordList',JSON.stringify(newRecordList)); 
+                   if(!Util.isStudent(this)){
+                         const id = this.$route.query.id+"";
+                            const recordList = sessionStorage.getItem('recordList');
+                            if(recordList&&!this.signStat){
+                                    const newRecordList = [];
+                                    _.each(JSON.parse(recordList),(record)=>{
+                                        const link_id = record[2].link.split('=')[1];
+                                        if(link_id!=id){
+                                            newRecordList.push(record)
+                                        }
+                                    });
+                                    sessionStorage.setItem('recordList',JSON.stringify(newRecordList)); 
 
-                    }
-
-
-
+                            }
+                   }
     }
   },
   computed:{
