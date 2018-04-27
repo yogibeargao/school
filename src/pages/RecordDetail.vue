@@ -10,13 +10,13 @@
                   <r-textarea title='实习描述:' :readonly="isreadonly" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
               </card>
                 <card v-if='!isStudent||!isEdit'>
-                  <r-textarea title='实习评价:'  :readonly="isreadonly" placeholder="请在这里输入实习评价" :model="this.record" value="apprisal"  :autoSize="true" :rows="10" :max="200"></r-textarea>
+                  <r-textarea title='实习评价:'  :readonly="isreadonly" placeholder="请在这里输入实习评价" :model="this.record" value="appraisalContent"  :autoSize="true" :rows="10" :max="200"></r-textarea>
               </card>
       </r-body>
                             <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
               <tab-bar v-if="isShow">
-                <cell type="row" :vertical="true" >
+                <cell type="row" :vertical="true" v-if="!isreadonly">
                               <cell >
                                   <box >
                                       <r-button :onClick="submit">提交</r-button>
@@ -55,7 +55,8 @@ export default {
       toastText:"操作失败",
       type : "warn",
       showFlag:false,
-      apprisal:false
+      apprisal:false,
+      state:1
     };
   },
   methods :{
@@ -107,7 +108,7 @@ export default {
       return Util.isStudent(this);
       },
       isreadonly(){
-        return !this.isShow;
+        return this.state==1?true:false;
       },
       isEdit(){
         const id = this.$route.query.id;
@@ -125,8 +126,8 @@ export default {
                     this.record = temp_record.body;
                     this.signStat = temp_record.body.signStat;
                     this.apprisal = temp_record.body.apprisal;
+                    this.state = temp_record.body.apprisalState;
                   }
-                               console.log(temp_record.body)
 
                   
           }

@@ -96,14 +96,14 @@ export default {
   },
   computed:{
       _target(){
-          if(Util.isTeacher(this)){
+          if(Util.isTeacher(this)||Util.isSchoolTeacher(this)){
               return [{"key":"3","value":"班级学生"}];
           }else{
               return  this.target;
           }
       },
       _source(){
-           if(Util.isTeacher(this)){
+           if(Util.isTeacher(this)||Util.isSchoolTeacher(this)){
               return false
           }else{
               return  true

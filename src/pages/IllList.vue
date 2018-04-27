@@ -78,30 +78,31 @@ export default {
       goto(){
         window.location.hash='/record/evaluate'
       },
-      flash(){
-         this.loadLeave();
+      flash(condition){
+         this.loadLeave(condition);
          this.flag=!this.flag;
       },
-      async loadLeave(){
+      async loadLeave(condition){
             this.user = JSON.parse(sessionStorage.getItem("user"));
             const identityId = Util.getIdentityId(this);
             const url = `leave/list`;
-            let param = {"pageNo":1,"pageSize":20};
-            if(this.isStudent){
+            let param = {"pageNo":1,"pageSize":50};
+            if(Util.isStudent(this)){
               param["studentNos"] = [identityId];
             }else{
               param["identityId"] = identityId;
+              param["studentNos"] = condition.student_Nos;
             }
             if(this.type!=null){
               param["status"] = this.type;
             }else{
               param["status"] = "0"
             }
-            if(this.condition.startDateStr!=null){
-              param["startDateStr"] = this.condition.startDateStr+":00";
+            if(condition.startDateStr!=null){
+              param["startDateStr"] = condition.startDateStr;
             }
-            if(this.condition.endDateStr!=null){
-              param["endDateStr"] = this.condition.endDateStr+":00";
+            if(condition.endDateStr!=null){
+              param["endDateStr"] = condition.endDateStr;
             }
             const leaves = await this.$http.post(url,param);
             const loadLeaves = [];

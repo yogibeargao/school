@@ -18,7 +18,7 @@
                   <upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" />
               </card>
 
-                   <cell type="row" :vertical="true">
+                   <cell type="row" :vertical="true" v-if="!isCompany">
                                 <cell>
                                   <box>
                                       <r-button v-if="state==0&&!isStudent" :onClick="approve" >审核通过</r-button>
@@ -152,6 +152,9 @@ export default {
     },
     isStudent(){
       return Util.isStudent(this);
+    },
+    isCompany(){
+      return Util.isCompany(this);
     },
     isShowUpload(){
             const leaveId = this.$route.query.leaveId;

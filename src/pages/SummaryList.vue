@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       condition: {},
-      status: null,
+      status: 0,
       name: [],
       data:{
         "head":[
@@ -71,7 +71,7 @@ export default {
                       this.condition.status = condition;
                   }
                   const identityId = Util.getIdentityId(this);
-                  const param = {"status":this.condition.status,"classId":this.condition.class,"studentNos":this.condition.student_Nos,"startDateStr":this.condition.startDateStr,"endDateStr":this.condition.endDateStr,"pageNo":1,"pageSize":50} 
+                  const param = {"status":this.condition.status?this.condition.status:0,"classId":this.condition.class,"studentNos":this.condition.student_Nos,"startDateStr":this.condition.startDateStr,"endDateStr":this.condition.endDateStr,"pageNo":1,"pageSize":50} 
                   const status = await this.$http.post(`intern/summary/list`,param);
                   const status_data = [];
                   _.each(status.body,(student,index)=>{
