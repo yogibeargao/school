@@ -79,7 +79,10 @@ export default {
         window.location.hash='/record/evaluate'
       },
       flash(condition){
-         this.loadLeave(condition);
+         if(condition==0||condition==1){
+                      this.condition.status = condition;
+          }
+         this.loadLeave(this.condition);
          this.flag=!this.flag;
       },
       async loadLeave(condition){

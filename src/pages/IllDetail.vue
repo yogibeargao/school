@@ -18,12 +18,12 @@
                   <upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" />
               </card>
 
-                   <cell type="row" :vertical="true" v-if="!isCompany">
+                   <cell type="row" :vertical="true" v-if="!isCompany&&!isSchoolTeacher">
                                 <cell>
                                   <box>
                                       <r-button v-if="state==0&&!isStudent" :onClick="approve" >审核通过</r-button>
                                       <r-button v-if="state==0&&!isStudent" :onClick="reject" type="danger">审核拒绝</r-button>
-                                      <r-button v-if="state==0&&!isStudent" :onClick="download" >下载病假单</r-button>
+                                      <r-button v-if="state==0&&!isStudent&&leaveType==1" :onClick="download" >下载病假单</r-button>
 
                                   </box>
                                 </cell>
@@ -155,6 +155,9 @@ export default {
     },
     isCompany(){
       return Util.isCompany(this);
+    },
+    isSchoolTeacher(){
+      return Util.isSchoolTeacher(this);
     },
     isShowUpload(){
             const leaveId = this.$route.query.leaveId;

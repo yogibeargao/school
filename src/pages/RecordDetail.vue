@@ -56,7 +56,7 @@ export default {
       type : "warn",
       showFlag:false,
       apprisal:false,
-      state:1
+      state:null
     };
   },
   methods :{
