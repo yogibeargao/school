@@ -101,7 +101,8 @@ export default {
        const self = this;
        const formData = new FormData();
       formData.append('file', file.file);
-             return await self.$http.post(`intern/summary/upload?filename=${file.name}`,formData);
+      formData.append('summaryId', this.id);
+      return await self.$http.post(`intern/summary/upload?filename=${file.name}`,formData);
     },
    inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
@@ -141,6 +142,7 @@ export default {
                   if(temp_record.body){
                     this.comments = temp_record.body.comments;
                     this.score = temp_record.body.score;
+                    this.id = temp_record.body.id;
                   }
   },
   

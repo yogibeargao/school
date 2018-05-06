@@ -1,6 +1,6 @@
 <template>
   <page>
-      <top title="公告" :showBack="true"/>
+      <top :title="this.isMessage?'消息':'公告'" :showBack="true"/>
       <r-body>
       <row title="筛选" :isLink="true" :model="this" value="filterValue" :onClick="onClickFilter"/>
       <panel :data="article_list" type='4'/>

@@ -10,7 +10,7 @@
                   <r-textarea title='实习描述:' :readonly="isreadonly" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
               </card>
                 <card v-if='!isStudent||!isEdit'>
-                  <r-textarea title='实习评价:'  :readonly="isreadonly" placeholder="请在这里输入实习评价" :model="this.record" value="appraisalContent"  :autoSize="true" :rows="10" :max="200"></r-textarea>
+                  <r-textarea title='实习评价:'  :readonly="isreadonly"  :model="this.record" value="appraisalContent"  :autoSize="true" :rows="10" :max="200"></r-textarea>
               </card>
       </r-body>
                             <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
@@ -70,9 +70,9 @@ export default {
                   this.record.endDateStr = this.record.endDateStr+":00";
                    temp_record = await this.$http.post(url,this.record);
         }else{
-                              const id = this.$route.query.id+"";
+                   const id = this.$route.query.id+"";
 
-                   const url = "intern/detail/appraisal/create?internDetailId="+id+"&comments="+this.record.apprisal;
+                   const url = "intern/detail/appraisal/create?internDetailId="+id+"&comments="+this.record.appraisalContent;
                    temp_record = await this.$http.post(url);
         }
 
@@ -123,6 +123,7 @@ export default {
                   if(temp_record.body){
                     temp_record.body.startDateStr = temp_record.body.startDateStr?temp_record.body.startDateStr.substring(0,16):"";
                     temp_record.body.endDateStr = temp_record.body.endDateStr?temp_record.body.endDateStr.substring(0,16):"";
+                    temp_record.body.appraisalContent=temp_record.body.appraisalContent=='null'?'':temp_record.body.appraisalContent;
                     this.record = temp_record.body;
                     this.signStat = temp_record.body.signStat;
                     this.apprisal = temp_record.body.apprisal;

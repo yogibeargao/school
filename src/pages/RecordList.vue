@@ -59,6 +59,7 @@ export default {
   },
   methods:{
       async search(condition){
+        debugger;
                   if(condition==0||condition==1){
                       this.condition.status = condition;
                   }
