@@ -118,7 +118,7 @@ export default {
               _article["title"] = article.title;
               _article["desc"] = article.content;
               _article["url"] = '/notes/detail?type='+this.isMessage+'&id='+_article.id+'&title='+article.title+'&content='+ article.content;
-              _article["meta"] = {"source":"来源： "+ article.author,"date":"更新时间： "+article.updateTime};
+              _article["meta"] = {"source":"来源： "+ article.author,"date":"更新时间： "+article.createTime};
               List.push(_article)
             });
             this.article_list = List;

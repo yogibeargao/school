@@ -93,7 +93,8 @@ export default {
     return {
       files: [],
       score:null,
-      comments:null
+      comments:null,
+      id:null
     };
   },
   methods: {
@@ -101,7 +102,9 @@ export default {
        const self = this;
        const formData = new FormData();
       formData.append('file', file.file);
-      formData.append('summaryId', this.id);
+      if(this.id){
+        formData.append('summaryId', this.id);
+      }
       return await self.$http.post(`intern/summary/upload?filename=${file.name}`,formData);
     },
    inputFilter(newFile, oldFile, prevent) {
