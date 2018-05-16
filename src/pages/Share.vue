@@ -1,31 +1,19 @@
 <template>
-  <page>
+  <r-page>
       <top title="位置共享" :showBack="true"/>
       <r-body>
-                    <card>
+                    <r-card>
                                 <r-table :data="data" />
-                    </card> 
+                    </r-card> 
       </r-body>          
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page, RBody,RImage, RButton,TabBar, Cell, Box, MenuBar,Grid,Card,RTable} from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import Util from "../util/util";
 
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    TabBar,
-    Cell,
-    RBody
-  },
+  
   data() {
     return {
        data:{

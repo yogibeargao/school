@@ -1,40 +1,27 @@
 <template>
-  <page>
+  <r-page>
       <top title="主页"/>
       <r-body>
       <r-image :list="head"/>
       <div style='margin-top:-15px' v-if="user.userType==0">
-           <card title="消息列表" :list="cardList"/>
+           <r-card title="消息列表" :list="cardList"/>
       </div>
             <div :style="styleClass">
-      <card title="功能列表">
-        <grid :data='gridItems'/>
-      </card>
+      <r-card title="功能列表">
+        <r-grid :data='gridItems'/>
+      </r-card>
             </div>
       </r-body>
       <r-dialog :model="this" value="shareShow">
             <r-button :onClick="goto">点击响应{{fkSharedRecordCreater}}</r-button>
       </r-dialog>
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page,RBody, RImage,RDialog,ConfirmApi, RButton, Cell, Box, MenuBar,Grid,Card,Popup} from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import index from "../assets/top.gif";
 import Util from "../util/util";
 export default {
-  components: {
-    Top,
-    Page,
-    RImage,
-    Card,
-    Grid,
-    Popup,
-    RBody,
-    RDialog,
-    RButton
-  },
   data() {
     return {
       shareShow:false,

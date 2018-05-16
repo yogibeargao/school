@@ -5,6 +5,8 @@ import router from './router/index';
 import i18n from './i18n/index';
 import "./plugin/fastClick";
 import "./plugin/confirm";
+import './components/index';
+
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 Vue.http.options.root = 'http://118.190.96.118:8080/exercitation-app'; 

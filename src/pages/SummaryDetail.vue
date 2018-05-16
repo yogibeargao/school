@@ -1,71 +1,37 @@
 <template>
-  <page>
+  <r-page>
       <top title="实习总结评价" :showBack="true"/>
       <r-body>
              <r-input title="分数:" :readonly="!isShow"   :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
              <r-textarea title="评价:" :readonly="!isShow"  :model="this" value="comments" :height="600" :max="600"></r-textarea>
       </r-body>
-             <tab-bar>
-                  <cell type="row" :vertical="true">
-                                <cell v-if="!score&&isShow">
-                                  <box >
+             <r-tab-bar>
+                  <r-cell type="row" :vertical="true">
+                                <r-cell v-if="!score&&isShow">
+                                  <r-box>
                                       <r-button :onClick="submit">通过</r-button>
-                                  </box>
-                                </cell>
-                                 <cell v-if="!score&&isShow">
-                                  <box >
+                                  </r-box>
+                                </r-cell>
+                                 <r-cell v-if="!score&&isShow">
+                                  <r-box>
                                       <r-button type='danger' :onClick="reject">打回</r-button>
-                                  </box>
-                                </cell>
-                                 <cell >
-                                  <box >
+                                  </r-box>
+                                </r-cell>
+                                 <r-cell >
+                                  <r-box>
                                       <r-button :onClick="download">下载实习报告</r-button>
-                                  </box>
-                                </cell>
-                    </cell>
-              </tab-bar>
-  </page>
+                                  </r-box>
+                                </r-cell>
+                    </r-cell>
+              </r-tab-bar>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RImage,
-  RButton,
-  RTextarea,
-  Selector,
-  Cell,
-  Box,
-  TabBar,
-  DateTime,
-  Grid,
-  Card,
-  RTable,
-  Selecter,
-  RBody,
-  ConfirmApi,
-  RInput
-} from "rainbow-mobile-core";
-import Top from "../components/Top.vue";
+
 import Vue from 'vue';
 
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    DateTime,
-    Selector,
-    RTextarea,
-    TabBar,
-    Cell,
-    RBody,
-    ConfirmApi,
-    RInput
-  },
   data() {
     return {
       comments: null,

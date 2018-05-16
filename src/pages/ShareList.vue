@@ -1,45 +1,26 @@
 <template>
-  <page>
+  <r-page>
       <top title="查看共享" :showBack="true"/>
       <r-body>
                     <search :condition="condition" :callBack="search"/>
-                  <card>
-                      <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
-                  </card>
-                    <card>
+                  <r-card>
+                      <r-selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></r-selector>
+                  </r-card>
+                    <r-card>
                                 <r-table :data="data" />
-                    </card>  
+                    </r-card>  
       </r-body>  
    
         
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page,RDialog,Toast,Row,Checker, RImage,RBody,Confirm, RButton,TabBar,Picker, Cell, Box, DateTime,Grid,Card,RTable,Selector } from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import Util from "../util/util";
 import  Search from '../components/Search.vue';
 
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    TabBar,
-    Cell,
-    Picker,
-    DateTime,
-    RBody,
-    Selector,
-    Confirm,
-    RDialog,
-    Row,
-    Checker,
-    Toast,
     Search
   },
   data() {

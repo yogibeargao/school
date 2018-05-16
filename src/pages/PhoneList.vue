@@ -1,56 +1,40 @@
 <template>
-  <page>
+  <r-page>
       <top title="手机审批" :showBack="true"/>
       <r-body>
                                   <search :condition="condition" :callBack="search" :showTime="false"/>
-               <card>
-                  <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
-              </card>
-                  <card>
+               <r-card>
+                  <r-selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></r-selector>
+              </r-card>
+                  <r-card>
                       <r-table :data="data" />
-                  </card>  
-          <tab-bar v-if="isShow">
-                  <cell type="row" :vertical="true">
-                                <cell>
-                                  <box >
+                  </r-card>  
+          <r-tab-bar v-if="isShow">
+                  <r-cell type="row" :vertical="true">
+                                <r-cell>
+                                  <r-box>
                                       <r-button :onClick="approve">全部通过</r-button>
-                                  </box>
-                                </cell>
-                                 <cell>
-                                  <box >
+                                  </r-box>
+                                </r-cell>
+                                 <r-cell>
+                                  <r-box>
                                       <r-button type='danger' :onClick="reject">全部拒绝</r-button>
-                                  </box>
-                                </cell>
-                    </cell>
-              </tab-bar>
+                                  </r-box>
+                                </r-cell>
+                    </r-cell>
+              </r-tab-bar>
       </r-body>         
   
      
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page, RBody,RImage, RButton,TabBar,Picker, Cell, Box, DateTime,Grid,Card,RTable,Selector,Checker,Row,RDialog,ConfirmApi } from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
+import {ConfirmApi } from "rainbow-mobile-core";
 import Util from "../util/util";
 import Search from '../components/Search.vue';
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    TabBar,
-    Cell,
-    Picker,
-    DateTime,
-    RBody,
-    Selector,
-    Checker,
-    Row,
-    RDialog,
     ConfirmApi,
     Search
   },

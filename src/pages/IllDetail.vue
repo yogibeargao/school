@@ -1,86 +1,58 @@
 <template>
-  <page>
+  <r-page>
       <top title="请假详情" :showBack="true"/>
       <r-body>
-              <card>
-                  <date-time  title='开始时间' :required="true" :readonly="!isShowDetail" :model="this" value="leaveStartDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
-                  <date-time  title='结束时间' :required="true" :readonly="!isShowDetail" :model="this" value="leaveEndDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></date-time>
-              </card>
-              <card>
-                  <selector  title="请假类型" :required="true" :readonly="!isShowDetail" :options="options" :model="this" value="leaveType" :onChange="type"></selector>
-              </card>
+              <r-card>
+                  <r-date-time  title='开始时间' :required="true" :readonly="!isShowDetail" :model="this" value="leaveStartDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></r-date-time>
+                  <r-date-time  title='结束时间' :required="true" :readonly="!isShowDetail" :model="this" value="leaveEndDate" format="YYYY-MM-DD HH:mm" :hourList="['09', '10', '11', '12', '13', '14', '15', '16', '17', '18']" :minuteList="['00', '15', '30', '45']"></r-date-time>
+              </r-card>
+              <r-card>
+                  <r-selector  title="请假类型" :required="true" :readonly="!isShowDetail" :options="options" :model="this" value="leaveType" :onChange="type"></r-selector>
+              </r-card>
            
-              <card>
+              <r-card>
                   <r-textarea placeholder="请假事由" :required="true" :readonly="!isShowDetail" :model="this"  value="reason" :height="200" :max="300"></r-textarea>
-              </card>
+              </r-card>
 
-              <card title="上传病假单" v-if="isShowDetail&&isShowUpload">
+              <r-card title="上传病假单" v-if="isShowDetail&&isShowUpload">
                   <upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" />
-              </card>
+              </r-card>
 
-                   <cell type="row" :vertical="true" v-if="!isCompany&&!isSchoolTeacher">
-                                <cell>
-                                  <box>
+                   <r-cell type="row" :vertical="true" v-if="!isCompany&&!isSchoolTeacher">
+                                <r-cell>
+                                  <r-box>
                                       <r-button v-if="state==0&&!isStudent" :onClick="approve" >审核通过</r-button>
                                       <r-button v-if="state==0&&!isStudent" :onClick="reject" type="danger">审核拒绝</r-button>
                                       <r-button v-if="state==0&&!isStudent&&leaveType==1" :onClick="download" >下载病假单</r-button>
 
-                                  </box>
-                                </cell>
-                    </cell>
+                                  </r-box>
+                                </r-cell>
+                    </r-cell>
       </r-body>
-             <tab-bar v-if="isShowDetail">
-                  <cell type="row" :vertical="true">
-                                <cell>
-                                  <box>
+             <r-tab-bar v-if="isShowDetail">
+                  <r-cell type="row" :vertical="true">
+                                <r-cell>
+                                  <r-box>
                                       <r-button :onClick="submit">提交</r-button>
-                                  </box>
-                                </cell>
-                    </cell>
-              </tab-bar>
+                                  </r-box>
+                                </r-cell>
+                    </r-cell>
+              </r-tab-bar>
            
-  </page>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RImage,
-  RButton,
-  RTextarea,
-  Selector,
-  Cell,
-  Box,
-  TabBar,
-  DateTime,
-  Grid,
-  Card,
-  RTable,
-  Selecter,
-  RBody,
-  ConfirmApi,
-} from "rainbow-mobile-core";
+
 import {Upload} from "rainbow-mobile-upload";
-import Top from "../components/Top.vue";
 import Util from "../util/util";
 import Vue from 'vue';
+import {ConfirmApi } from "rainbow-mobile-core";
 
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    DateTime,
-    Selector,
-    RTextarea,
-    TabBar,
-    Cell,
     Upload,
-    RBody,
-    RImage
+    ConfirmApi
   },
   data() {
     return {

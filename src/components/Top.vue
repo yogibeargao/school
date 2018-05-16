@@ -1,18 +1,12 @@
 <template>
 <div>
         <r-header :title="title" :showBack="showBack" backText="后退" :showMore="true" :onClickMore="onClickMore"></r-header>
-        <actionsheet :model="this" value="showMenu" :menuList="menuList" :headerHtml="headerHtml" :onClick="onClickSheet"/>
+        <r-actionsheet :model="this" value="showMenu" :menuList="menuList" :headerHtml="headerHtml" :onClick="onClickSheet"/>
 </div>
 </template>
 
 <script>
-import { RHeader,Actionsheet} from 'rainbow-mobile-core';
-
 export default {
-  components: {
-    RHeader,
-    Actionsheet 
-  },
   props: {
     title: String,
     showBack:Boolean

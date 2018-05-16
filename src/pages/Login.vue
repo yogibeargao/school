@@ -1,50 +1,35 @@
 <template>
-<page>
+<r-page>
             <r-header title="上海行健职业技术学院"/>
             <r-body>
             <r-image :list="logo"/>
-             <card>
+             <r-card>
                 <r-input :model="user" value="name" placeholder="请输入用户名"  :required="true" :novalidate="false">
                   <span class="fa fa-phone" style="margin-left:10px;margin-right:10px;"/>
                 </r-input>
                 <r-input placeholder="请输入密码" :isPassword="true" :model="user" value="password" :required="true" :novalidate="false">
                   <span class="fa fa-eye-slash"  style="margin-left:10px;margin-right:10px;"/>
                 </r-input>
-              </card>
+              </r-card>
             </r-body>
-                        <toast :model="user" value="showFlag" :text="toastText" type='warn'/>
+                        <r-toast :model="user" value="showFlag" :text="toastText" type='warn'/>
 
-              <tab-bar>
-                  <cell type="row" :vertical="true">
-                                <cell >
-                                    <box >
+              <r-tab-bar>
+                  <r-cell type="row" :vertical="true">
+                                <r-cell >
+                                    <r-box>
                                     <r-button  :onClick="login">登录</r-button>
-                                    </box>
-                                </cell>
-                    </cell>
-              </tab-bar>
+                                    </r-box>
+                                </r-cell>
+                    </r-cell>
+              </r-tab-bar>
 
-</page>
+</r-page>
 </template>
 
 <script>
-import { Page, RImage,RBody, Toast,RButton,RInput, Cell,Card, Box, RHeader,Divider,TabBar } from "rainbow-mobile-core";
 import logo from "../assets/logo.png";
 export default {
-  components: {
-    Page,
-    RImage,
-    RButton,
-    Cell,
-    Card,
-    RInput,
-    Box,
-    RHeader,
-    Divider,
-    TabBar,
-    RBody,
-    Toast
-  },
   data() {
     return {
       logo: [

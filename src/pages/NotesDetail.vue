@@ -1,32 +1,21 @@
 <template>
-  <page>
+  <r-page>
              <top title="消息详情" :showBack="true"/>
              <r-body>
-              <card>
+              <r-card>
                   <r-input title="标题" :model="this" value="title" :readonly="true"/>
                   <r-textarea :readonly="true" placeholder="消息详情" :model="this" value="content" :height="517" :max="300"></r-textarea>
-              </card>
+              </r-card>
              </r-body>
-  </page>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RTextarea,
-  Card,
-  RInput,
-  RBody
-} from "rainbow-mobile-core";
-import Top from "../components/Top.vue";
+import {ConfirmApi } from "rainbow-mobile-core";
+
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    RTextarea,
-    RInput,
-    RBody
+    ConfirmApi
   },
   data() {
     return {

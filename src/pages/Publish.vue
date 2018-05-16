@@ -1,82 +1,39 @@
 <template>
-  <page>
+  <r-page>
       <top title="信息发布" :showBack="true"/>
       <r-body>
-              <card>
-                  <selector title="发布对象" :options="_target" :model="this.publish" value="target"  ></selector>
-                  <row title="班级" :model="this" value="v_classes"  :onClick="showClass" :isLink="true" v-if="this.publish.target==3"></row>
-                  <selector v-if="_source" title="发布源" :options="source" :model="this.publish" value="source"  ></selector>
-              </card>
+              <r-card>
+                  <r-selector title="发布对象" :options="_target" :model="this.publish" value="target"  ></r-selector>
+                  <r-row title="班级" :model="this" value="v_classes"  :onClick="showClass" :isLink="true" v-if="this.publish.target==3"></</r-row>
+                  <r-selector v-if="_source" title="发布源" :options="source" :model="this.publish" value="source"  ></r-selector>
+              </r-card>
               
-              <card>
+              <r-card>
                  <r-input title="标题" :model="this.publish" value="title" ></r-input>
                  <r-textarea :model="this.publish" value="content" placeholder="请输入要发布的信息" :max='300' :height="350"/>
-              </card>
+              </r-card>
       </r-body> 
-            <popup :model="this" value="show"  :disableMask="true">
-                 <checker :model="this.publish" value="classes" :data='classes' type="list" :onChange="onChange"/>
-            </popup>
-            <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
+            <r-popup :model="this" value="show"  :disableMask="true">
+                 <r-checker :model="this.publish" value="classes" :data='classes' type="list" :onChange="onChange"/>
+            </r-popup>
+            <r-toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
-            <tab-bar>
-                <cell type="row" :vertical="true">
-                              <cell >
-                                  <box >
+            <r-tab-bar>
+                <r-cell type="row" :vertical="true">
+                              <r-cell >
+                                  <r-box>
                                       <r-button :onClick="create">发布</r-button>
-                                  </box>
-                              </cell>
-                  </cell>
-            </tab-bar>
-  </page>
+                                  </r-box>
+                              </r-cell>
+                  </r-cell>
+            </r-tab-bar>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RImage,
-  RButton,
-  RTextarea,
-  Picker,
-  Cell,
-  Box,
-  TabBar,
-  DateTime,
-  Grid,
-  Card,
-  RTable,
-  RBody,
-  Selector,
-  RInput,
-  Popup,
-  Row,
-  Checker,
-  Toast,
-  LoadingApi
-} from "rainbow-mobile-core";
-import Top from "../components/Top.vue";
 import Util from "../util/util";
 
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    DateTime,
-    Picker,
-    RTextarea,
-    TabBar,
-    Cell,
-    RBody,
-    Selector,
-    RInput,
-    Popup,
-    Row,
-    Checker,
-    Toast
-  },
   data() {
     return {
       startDate: null,

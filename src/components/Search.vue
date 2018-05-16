@@ -1,45 +1,24 @@
 <template>
   <div>
-                <card v-if="showClass">
-                    <selector  title="班级" :options="classes" :model="this.condition" value="class" :onChange="classChange"></selector>
-                    <row title="学生" :model="this" value="v_student"  :onClick="showStudent" :isLink="true" ></row>
-                </card>
-                <card v-if="showTime">
-                  <date-time  title='开始时间' :model="this.condition" value="startDateStr" format="YYYY-MM-DD HH:mm:00"  :minuteList="['00', '15', '30', '45']" :onChange="search"></date-time>
-                  <date-time  title='结束时间' :model="this.condition" value="endDateStr" format="YYYY-MM-DD HH:mm:00"  :minuteList="['00', '15', '30', '45']" :onChange="search"></date-time>
-                </card>
+                <r-card v-if="showClass">
+                    <r-selector  title="班级" :options="classes" :model="this.condition" value="class" :onChange="classChange"></r-selector>
+                    <r-row title="学生" :model="this" value="v_student"  :onClick="showStudent" :isLink="true" ></</r-row>
+                </r-card>
+                <r-card v-if="showTime">
+                  <r-date-time  title='开始时间' :model="this.condition" value="startDateStr" format="YYYY-MM-DD HH:mm:00"  :minuteList="['00', '15', '30', '45']" :onChange="search"></r-date-time>
+                  <r-date-time  title='结束时间' :model="this.condition" value="endDateStr" format="YYYY-MM-DD HH:mm:00"  :minuteList="['00', '15', '30', '45']" :onChange="search"></r-date-time>
+                </r-card>
                 <r-dialog :model="this" value="showDialog" :disableMask="false">
-                    <checker :model="this.condition" value="student" :data='students' type="list" :onChange="onChange"/>
+                    <r-checker :model="this.condition" value="student" :data='students' type="list" :onChange="onChange"/>
                 </r-dialog>
-                <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
+                <r-toast :model="this" value="showFlag" :text="toastText" :type='type'/>
   </div>
 </template>
 
 <script>
-import { Page,RDialog,Toast,Row,Checker, RImage,RBody,Confirm, RButton,TabBar,Picker, Cell, Box, DateTime,Grid,Card,RTable,Selector } from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import Util from "../util/util";
 
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    TabBar,
-    Cell,
-    Picker,
-    DateTime,
-    RBody,
-    Selector,
-    Confirm,
-    RDialog,
-    Row,
-    Checker,
-    Toast
-  },
    props: {
     showClass: { 
         type: Boolean, 

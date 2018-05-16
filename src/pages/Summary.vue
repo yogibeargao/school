@@ -1,11 +1,11 @@
 <template>
-  <page>
+  <r-page>
       <top title="实习总结" :showBack="true"/>
       <r-body>
              <r-input title="分数:" :readonly="true"   :max="100" :min="0"  :model="this" value="score" :isNumber="true"/>
              <r-textarea title="评价:" :readonly="true"   :model="this" value="comments" :height="600" :max="600"></r-textarea>
        </r-body>
-             <tab-bar v-if="!score">
+             <r-tab-bar v-if="!score">
                   <div class="example-simple">
     <div class="upload" >
       <ul>
@@ -45,49 +45,15 @@
     </div>
     
   </div>
-              </tab-bar>
-  </page>
+              </r-tab-bar>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RImage,
-  RButton,
-  RTextarea,
-  Selector,
-  Cell,
-  Box,
-  TabBar,
-  DateTime,
-  Grid,
-  Card,
-  RInput,
-  Selecter,
-  RBody
-} from "rainbow-mobile-core";
-
-
-
-import Top from "../components/Top.vue";
 import FileUpload from 'vue-upload-component'
-
-
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    DateTime,
-    Selector,
-    RTextarea,
-    TabBar,
-    Cell,
-    RBody,
     FileUpload,
-    RInput
   },
   data() {
     return {

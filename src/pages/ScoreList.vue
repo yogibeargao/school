@@ -1,62 +1,26 @@
 <template>
-  <page>
+  <r-page>
       <top title="学生成绩" :showBack="true"/>
       <r-body>
               <search :condition="condition" :callBack="search" :showTime="false"/>
-              <card>
-                      <selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></selector>
-               </card>
-              <card>
+              <r-card>
+                      <r-selector  title="状态" :options="options" :model="this" value="status" :onChange="search"></r-selector>
+               </r-card>
+              <r-card>
                    <r-table :data="data" />
-              </card>
+              </r-card>
 
              
       </r-body>
-  </page>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RImage,
-  RButton,
-  RTextarea,
-  Picker,
-  Cell,
-  Box,
-  TabBar,
-  DateTime,
-  Grid,
-  Card,
-  RTable,
-  RDialog,
-  RBody,
-  Selector,
-  Checker,
-  Row
-} from "rainbow-mobile-core";
-import Top from "../components/Top.vue";
 import Util from "../util/util";
 import  Search from '../components/Search.vue';
 
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    DateTime,
-    Picker,
-    RTextarea,
-    TabBar,
-    Cell,
-    RBody,
-    Selector,
-    RDialog,
-    Checker,
-    Row,
     Search
   },
   data() {

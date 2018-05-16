@@ -1,49 +1,35 @@
 <template>
-  <page>
+  <r-page>
       <top title="请假列表" :showBack="true"/>
 <r-body>
               
                <search :condition="condition" :callBack="flash" :showClass="!isShowClass"/>
 
-               <card>
-                  <selector  title="状态" :options="options" :model="this" value="type" :onChange="flash"></selector>
-              </card>
-                <card>
+               <r-card>
+                  <r-selector  title="状态" :options="options" :model="this" value="type" :onChange="flash"></r-selector>
+              </r-card>
+                <r-card>
                       <r-table :data="data" />
-                </card>
+                </r-card>
 </r-body>   
-  <tab-bar>
-                <cell type="row" :vertical="true" v-if="isStudent">
-                              <cell>
-                                  <box>
+  <r-tab-bar>
+                <r-cell type="row" :vertical="true" v-if="isStudent">
+                              <r-cell>
+                                  <r-box>
                                       <r-button link='/ill/detail?type=submit'>请假申请</r-button>
-                                  </box>
-                              </cell>
-                  </cell>
-            </tab-bar>  
-  </page>
+                                  </r-box>
+                              </r-cell>
+                  </r-cell>
+            </r-tab-bar>  
+  </r-page>
 </template>
 
 <script>
-import { Page,RBody, RImage, RButton,TabBar,Picker, Cell,Selector, Box, DateTime,Grid,Card,RTable } from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import Util from "../util/util";
 import  Search from '../components/Search.vue';
 
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    DateTime,
-    Cell,
-    Picker,
-    TabBar,
-    Selector,
-    RBody,
     Search
   },
   data() {

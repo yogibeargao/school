@@ -1,40 +1,24 @@
 <template>
-  <page>
+  <r-page>
       <top :title="this.isMessage?'消息':'公告'" :showBack="true"/>
       <r-body>
-      <row title="筛选" :isLink="true" :model="this" value="filterValue" :onClick="onClickFilter"/>
-      <panel :data="article_list" type='4'/>
-      <popup position="right" :model="this" value="showFilter" :disableMask="true">
-        <checker title="信息来源"  :data="objectList" :modelKey="true" :model="this" value="filter" :max="1" v-if="!isMessage"/>
-        <checker title="已读/未读"  :data="filterList" :modelKey="true" :model="this" value="readFilter" :max="1" />
-        <box position="center" >
+      <r-row title="筛选" :isLink="true" :model="this" value="filterValue" :onClick="onClickFilter"/>
+      <r-panel :data="article_list" type='4'/>
+      <r-popup position="right" :model="this" value="showFilter" :disableMask="true">
+        <r-checker title="信息来源"  :data="objectList" :modelKey="true" :model="this" value="filter" :max="1" v-if="!isMessage"/>
+        <r-checker title="已读/未读"  :data="filterList" :modelKey="true" :model="this" value="readFilter" :max="1" />
+        <r-box position="center" >
         <r-button :mini="true" :onClick="_filter">筛选</r-button>
-        </box>
-      </popup>
+        </r-box>
+      </r-popup>
       </r-body>
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page,RBody, RImage, RButton,Row, Cell, Box,Popup,Checker, MenuBar,Grid,Card,Panel} from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import index from "../assets/top.gif";
 import Util from "../util/util";
 export default {
-  components: {
-    Top,
-    Page,
-    RImage,
-    Card,
-    Grid,
-    Panel,
-    Row,
-    Popup,
-    Checker,
-    RButton,
-    Box,
-    RBody
-  },
   data() {
     return {
        filter:null,

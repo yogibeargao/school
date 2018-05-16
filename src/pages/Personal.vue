@@ -1,40 +1,29 @@
 <template>
-  <page>
+  <r-page>
       <top title="个人信息" :showBack="true"/>
       <r-body>
             <r-image :list="userImg"/>
-            <row title="姓名" :model="this.user" value='studentName' v-if="isStudent"/>
-            <row title="姓名" :model="this.user" value='teachername' v-if="!isStudent"/>
-            <row title="性别" :model="this.user" value='sex'/>
-            <row title="学号" :model="this.user" value='studentNo' v-if="isStudent"/>
-            <row title="班级" :model="this.user" value='className' v-if="isStudent"/>
-            <row title="工号" :model="this.user" value='teacherNo' v-if="!isStudent"/>
-            <row title="实习单位" :model="this.user" value='internShipUnit' v-if="isStudent"/>
-            <row title="实习地址" :model="this.user" value='workAddress' v-if="isStudent"/>
-            <row title="工作地址" :model="this.user" value='address' v-if="!isStudent"/>
-            <row title="电话" :model="this.user" value='phoneNo' :isLink="isStudent" :onClick="changPhone"/>
+            <r-row title="姓名" :model="this.user" value='studentName' v-if="isStudent"/>
+            <r-row title="姓名" :model="this.user" value='teachername' v-if="!isStudent"/>
+            <r-row title="性别" :model="this.user" value='sex'/>
+            <r-row title="学号" :model="this.user" value='studentNo' v-if="isStudent"/>
+            <r-row title="班级" :model="this.user" value='className' v-if="isStudent"/>
+            <r-row title="工号" :model="this.user" value='teacherNo' v-if="!isStudent"/>
+            <r-row title="实习单位" :model="this.user" value='internShipUnit' v-if="isStudent"/>
+            <r-row title="实习地址" :model="this.user" value='workAddress' v-if="isStudent"/>
+            <r-row title="工作地址" :model="this.user" value='address' v-if="!isStudent"/>
+            <r-row title="电话" :model="this.user" value='phoneNo' :isLink="isStudent" :onClick="changPhone"/>
       </r-body>     
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page, RBody,RImage, RButton,TabBar,Confirm,RForm, Row, Box, MenuBar,Grid,Card,RTable,ConfirmApi } from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import user from "../assets/user.gif";
 import Util from "../util/util";
+import {ConfirmApi } from "rainbow-mobile-core";
 
 export default {
   components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    TabBar,
-    Row,
-    RImage,
-    RBody,
     ConfirmApi
   },
   data() {

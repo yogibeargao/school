@@ -1,27 +1,21 @@
 <template>
-  <page>
+  <r-page>
       <top title="实习成绩" :showBack="true"/>
       <r-body>
-              <card>
+              <r-card>
                   <previewer title="总成绩" :value="score" :data="list1"></previewer>
-              </card>
+              </r-card>
       </r-body>
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page,Card,RBody} from "rainbow-mobile-core";
 import {Previewer} from 'rainbow-mobile-previewer'
-import Top from "../components/Top.vue";
 import Util from "../util/util";
 
 export default {
   components: {
-    Top,
-    Page,
-    Card,
     Previewer,
-    RBody
   },
   data() {
     return {

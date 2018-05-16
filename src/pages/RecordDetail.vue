@@ -1,53 +1,37 @@
 <template>
-  <page>
+  <r-page>
       <top title="记录详情" :showBack="true"/>
       <r-body>
-              <card>
-                  <date-time :readonly="isreadonly"  title='开始时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="startDateStr" :minuteList="['00', '15', '30', '45']"></date-time>
-                  <date-time  :readonly="isreadonly" title='结束时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="endDateStr"  :minuteList="['00', '15', '30', '45']"></date-time>
-              </card>
-              <card>
+              <r-card>
+                  <r-date-time :readonly="isreadonly"  title='开始时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="startDateStr" :minuteList="['00', '15', '30', '45']"></r-date-time>
+                  <r-date-time  :readonly="isreadonly" title='结束时间' format="YYYY-MM-DD HH:mm" :model="this.record" value="endDateStr"  :minuteList="['00', '15', '30', '45']"></r-date-time>
+              </r-card>
+              <r-card>
                   <r-textarea title='实习描述:' :readonly="isreadonly" placeholder="请在这里输入实习描述" :model="this.record" value="internDescription" :height="200" :max="200"></r-textarea>
-              </card>
-                <card v-if='!isStudent||!isEdit'>
+              </r-card>
+                <r-card v-if='!isStudent||!isEdit'>
                   <r-textarea title='实习评价:'  :readonly="isreadonly"  :model="this.record" value="appraisalContent"  :autoSize="true" :rows="10" :max="200"></r-textarea>
-              </card>
+              </r-card>
       </r-body>
-                            <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
+                            <r-toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
-              <tab-bar v-if="isShow">
-                <cell type="row" :vertical="true" v-if="!isreadonly">
-                              <cell >
-                                  <box >
+              <r-tab-bar v-if="isShow">
+                <r-cell type="row" :vertical="true" v-if="!isreadonly">
+                              <r-cell >
+                                  <r-box>
                                       <r-button :onClick="submit">提交</r-button>
-                                  </box>
-                              </cell>
-                  </cell>
-             </tab-bar>
-  </page>
+                                  </r-box>
+                              </r-cell>
+                  </r-cell>
+             </r-tab-bar>
+  </r-page>
 </template>
 
 <script>
-import { Page, RBody,RImage,RTextarea,Toast, RButton, Selector,Cell, Box,TabBar, DateTime,Grid,Card,RTable,Selecter} from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 import Util from "../util/util";
 
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    DateTime,
-    Selector,
-    RTextarea,
-    TabBar,
-    Cell,
-    RBody,
-    Toast
-  },
+
   data() {
     return {
       record:{},

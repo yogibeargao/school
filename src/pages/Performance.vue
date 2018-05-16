@@ -1,40 +1,25 @@
 <template>
-  <page>
+  <r-page>
       <top title="实习表现" :showBack="true"/>
       <r-body>
-           <card title="实习评价">
+           <r-card title="实习评价">
                   <r-input title="分数:" :readonly="true"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
                   <r-textarea title="评价:" :readonly="true" :model="this" value="comments" :height="300" :max="600"></r-textarea>
-            </card>
-            <card title="实习表现">
+            </r-card>
+            <r-card title="实习表现">
                   <div id="ill" style="width: 100%;height:270px;"></div>
-            </card>
-            <card title="记录表现">
+            </r-card>
+            <r-card title="记录表现">
                   <div id="record" style="width: 100%;height:270px;"></div>
-            </card>
+            </r-card>
       </r-body>
            
           
-  </page>
+  </r-page>
 </template>
 
 <script>
-import { Page, RBody,RImage,RInput,RButton,RTextarea, Cell, Box, MenuBar,TabBar,Card,RTable } from "rainbow-mobile-core";
-import  Top from '../components/Top.vue';
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    TabBar,
-    Cell,
-    RTextarea,
-    RBody,
-    RInput
-  },
   data(){
       return {
           comments:null,

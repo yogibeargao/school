@@ -1,62 +1,31 @@
 <template>
-  <page>
+  <r-page>
       <top title="实习评价详情" :showBack="true"/>
       <r-body>
              <r-input title="分数"  :max="100" :min="0"  :model="this" value="v_score" :isNumber="true"/>
              <r-textarea placeholder="请输入评价" :model="this" value="comments" :height="600" :max="600"></r-textarea>
       </r-body>
-             <tab-bar>
-                  <cell type="row" :vertical="true">
-                                <cell v-if="!score">
-                                  <box >
+             <r-tab-bar>
+                  <r-cell type="row" :vertical="true">
+                                <r-cell v-if="!score">
+                                  <r-box>
                                       <r-button :onClick="submit">提交</r-button>
-                                  </box>
-                                </cell>
+                                  </r-box>
+                                </r-cell>
                                 
-                    </cell>
-              </tab-bar>
-  </page>
+                    </r-cell>
+              </r-tab-bar>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RImage,
-  RButton,
-  RTextarea,
-  Selector,
-  Cell,
-  Box,
-  TabBar,
-  DateTime,
-  Grid,
-  Card,
-  RTable,
-  Selecter,
-  RBody,
-  ConfirmApi,
-  RInput
-} from "rainbow-mobile-core";
-import Top from "../components/Top.vue";
 import Vue from 'vue';
 import Util from "../util/util";
+import {ConfirmApi } from "rainbow-mobile-core";
 
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    DateTime,
-    Selector,
-    RTextarea,
-    TabBar,
-    Cell,
-    RBody,
-    ConfirmApi,
-    RInput
+   components: {
+    ConfirmApi
   },
   data() {
     return {

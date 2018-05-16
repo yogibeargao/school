@@ -1,55 +1,28 @@
 <template>
-  <page>
+  <r-page>
       <top :title="_title" :showBack="true"/>
       <div id="container" class="map"></div>
-                      <toast :model="this" value="showFlag" :text="toastText" :type='type'/>
+                      <r-toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
-       <tab-bar>
-            <cell type="row" :vertical="true">
-                        <cell >
+       <r-tab-bar>
+            <r-cell type="row" :vertical="true">
+                        <r-cell >
                             <div class='location-name'>{{locationName}}</div>
-                        </cell>
-                        <cell >
-                            <box >
+                        </r-cell>
+                        <r-cell >
+                            <r-box>
                                 <r-button :onClick="click" >{{_share}}</r-button>
-                            </box>
-                        </cell>
-            </cell>
-       </tab-bar>
-  </page>
+                            </r-box>
+                        </r-cell>
+            </r-cell>
+       </r-tab-bar>
+  </r-page>
 </template>
 
 <script>
-import {
-  Page,
-  RBody,
-  RImage,
-  RButton,
-  Cell,
-  Box,
-  MenuBar,
-  Grid,
-  Card,
-  RTable,
-  TabBar,
-  Toast
-} from "rainbow-mobile-core";
-import Top from "../components/Top.vue";
 import Util from "../util/util";
 
 export default {
-  components: {
-    Top,
-    Page,
-    Card,
-    Box,
-    RButton,
-    RTable,
-    Cell,
-    TabBar,
-    RBody,
-    Toast
-  },
   data() {
     return {
       locationName: null,
