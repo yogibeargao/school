@@ -3,19 +3,19 @@
       <top title="实习成绩" :showBack="true"/>
       <r-body>
               <r-card>
-                  <previewer title="总成绩" :value="score" :data="list1"></previewer>
+                  <r-previewer title="总成绩" :value="score" :data="list1"></r-previewer>
               </r-card>
       </r-body>
   </r-page>
 </template>
 
 <script>
-import {Previewer} from 'rainbow-mobile-previewer'
+import {RPreviewer} from 'rainbow-mobile-previewer'
 import Util from "../util/util";
 
 export default {
   components: {
-    Previewer,
+    RPreviewer,
   },
   data() {
     return {

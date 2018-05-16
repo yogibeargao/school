@@ -15,7 +15,7 @@
               </r-card>
 
               <r-card title="上传病假单" v-if="isShowDetail&&isShowUpload">
-                  <upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" />
+                  <r-image-upload :max="1" url="leave/img" name="file" :onSuccess="uploadSuccess" />
               </r-card>
 
                    <r-cell type="row" :vertical="true" v-if="!isCompany&&!isSchoolTeacher">
@@ -44,14 +44,14 @@
 
 <script>
 
-import {Upload} from "rainbow-mobile-upload";
+import {RImageUpload} from "rainbow-mobile-upload";
 import Util from "../util/util";
 import Vue from 'vue';
 import {ConfirmApi } from "rainbow-mobile-core";
 
 export default {
   components: {
-    Upload,
+    RImageUpload,
     ConfirmApi
   },
   data() {
