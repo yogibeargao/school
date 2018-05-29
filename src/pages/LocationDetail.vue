@@ -1,17 +1,17 @@
 <template>
   <r-page>
       <top :title="_title" :showBack="true"/>
-      <div id="container" class="map"></div>
+      <div id="container" class="map" v-show="showMap"></div>
                       <r-toast :model="this" value="showFlag" :text="toastText" :type='type'/>
 
        <r-tab-bar>
             <r-cell type="row" :vertical="true">
                         <r-cell >
-                            <div class='location-name'>{{locationName}}</div>
+                            <div class='location-name' v-show="showMap">{{locationName}}</div>
                         </r-cell>
                         <r-cell >
                             <r-box>
-                                <r-button :onClick="click" >{{_share}}</r-button>
+                                <r-button :onClick="click" :disabled="!showMap">{{_share}}</r-button>
                             </r-box>
                         </r-cell>
             </r-cell>
@@ -21,13 +21,14 @@
 
 <script>
 import Util from "../util/util";
-
+import {LoadingApi} from 'rainbow-mobile-core';
 export default {
   data() {
     return {
       locationName: null,
       latitude: null,
       longitude: null,
+      showMap:false,
       showFlag:false,
       toastText:"",
       type:"success",
@@ -97,8 +98,10 @@ export default {
   mounted() {
     const self = this;
     const map = new BMap.Map("container");
-    //var point = new BMap.Point(116.331398,39.897445);
-    //map.centerAndZoom(point,12);
+     LoadingApi.show(this,{
+                transition: '',
+                text: "正在定位"
+      });
 
     map.disableDragging(); //禁止拖拽
 
@@ -119,6 +122,9 @@ export default {
               self.locationName = result.address;
             }
           });
+
+          self.showMap = true;
+          LoadingApi.hide(self);
 
           //mk.enableDragging();
 
